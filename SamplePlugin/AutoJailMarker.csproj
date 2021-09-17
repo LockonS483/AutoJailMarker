@@ -1,0 +1,68 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	
+  <PropertyGroup>
+    <Authors></Authors>
+    <Company></Company>
+    <Version>0.0.0.1</Version>
+    <Description>A sample plugin.</Description>
+    <Copyright></Copyright>
+    <PackageProjectUrl>https://github.com/goatcorp/SamplePlugin</PackageProjectUrl>
+  </PropertyGroup>
+
+  <PropertyGroup>
+	<AssemblyVersion>2.1.4.2</AssemblyVersion>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <Platforms>x64;AnyCPU</Platforms>
+    <LangVersion>9.0</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	<UseWindowsForms>true</UseWindowsForms>
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputPath>$(AppData)\XIVLauncher\devPlugins\SamplePlugin\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="..\Data\samplePlugin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Data\goat.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>false</Visible>
+    </Content>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <DalamudLibPath>$(appdata)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DalamudPackager" Version="2.1.2" />
+    <Reference Include="Dalamud">
+      <HintPath>..\..\..\..\AppData\Roaming\XIVLauncher\addon\Hooks\dev\Dalamud.dll</HintPath>
+    </Reference>
+    <Reference Include="FFXIVClientStructs">
+      <HintPath>..\..\..\..\AppData\Roaming\XIVLauncher\addon\Hooks\dev\FFXIVClientStructs.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(DalamudLibPath)Newtonsoft.Json.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ImGui.NET">
+      <HintPath>$(DalamudLibPath)ImGui.NET.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ImGuiScene">
+      <HintPath>$(DalamudLibPath)ImGuiScene.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Lumina">
+      <HintPath>$(DalamudLibPath)Lumina.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Lumina.Excel">
+      <HintPath>$(DalamudLibPath)Lumina.Excel.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+</Project>
