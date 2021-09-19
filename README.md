@@ -1,4 +1,4 @@
-# SamplePlugin
+# UWU Jail Automarker
 Scuffed Jail Automarkers that injects marking commands instead of using macros.
 
 
