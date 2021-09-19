@@ -1,6 +1,10 @@
 ﻿using ImGuiNET;
 using System;
+using System.Collections.Generic;
 using System.Numerics;
+using AutoJailMarker;
+using Dalamud.Game.ClientState.Objects.Types;
+using Dalamud.Game.ClientState.Party;
 
 namespace AutoJailMarker
 {
@@ -11,6 +15,8 @@ namespace AutoJailMarker
         private Configuration configuration;
 
         private ImGuiScene.TextureWrap goatImage;
+
+        private AutoJailMarker parent;
 
         // this extra bool exists for ImGui, since you can't ref a property
         private bool visible = false;
@@ -28,10 +34,11 @@ namespace AutoJailMarker
         }
 
         // passing in the image here just for simplicity
-        public PluginUI(Configuration configuration, ImGuiScene.TextureWrap goatImage)
+        public PluginUI(Configuration configuration, ImGuiScene.TextureWrap goatImage, AutoJailMarker p)
         {
             this.configuration = configuration;
             this.goatImage = goatImage;
+            this.parent = p;
         }
 
         public void Dispose()
@@ -60,21 +67,41 @@ namespace AutoJailMarker
 
             ImGui.SetNextWindowSize(new Vector2(375, 330), ImGuiCond.FirstUseEver);
             ImGui.SetNextWindowSizeConstraints(new Vector2(375, 330), new Vector2(float.MaxValue, float.MaxValue));
-            if (ImGui.Begin("My Amazing Window", ref this.visible, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
+            if (ImGui.Begin("Auto Jail Markers", ref this.visible, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
             {
-                ImGui.Text($"The random config bool is {this.configuration.SomePropertyToBeSavedAndWithADefault}");
-
-                if (ImGui.Button("try marker"))
+                for (int i = 0; i < 8; i++)
                 {
-                    Game.ExecuteCommand("/mk attack1 <me>");
+                    if (ImGui.InputText(i.ToString(), ref configuration.prio[i], 256))
+                    {
+                        configuration.Save();
+                    }
+                }
+
+                if (ImGui.Button("try partylist"))
+                {
+                    parent.UpdateOrderedParty();
+                }
+
+                ImGui.Text($"Current party size: {DalamudApi.PartyList.Length.ToString()}");
+                if (AutoJailMarker.PlayerExists)
+                {
+                    foreach(PartyMember p in DalamudApi.PartyList)
+                    {
+                        ImGui.Text(p.Name.ToString());
+                        ImGui.SameLine();
+                        ImGui.Text($"   OID: {p.ObjectId.ToString()}");
+                    }
                 }
 
                 ImGui.Spacing();
 
-                ImGui.Text("Have a goat:");
-                ImGui.Indent(55);
+                ImGui.Text("---------------");
+                ImGui.Indent(10);
                 ImGui.Image(this.goatImage.ImGuiHandle, new Vector2(this.goatImage.Width, this.goatImage.Height));
-                ImGui.Unindent(55);
+                ImGui.Unindent(10);
+
+                ImGui.Text($"isCollecting: {parent.isCollecting.ToString()}");
+                ImGui.Text($"Marked: {parent.marked.ToString()}");
             }
             ImGui.End();
         }

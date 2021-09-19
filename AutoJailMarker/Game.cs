@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using AutoJailMarker.Structures;
 using Dalamud;
+using Dalamud.Game.ClientState.Party;
+using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.ClientState.Objects.SubKinds;
+using Dalamud.Game.ClientState.Objects.Types;
+
 using Dalamud.Hooking;
 using Dalamud.Logging;
 using FFXIVClientStructs.FFXIV.Component.GUI;
-using AutoJailMarker.Structures;
 
 namespace AutoJailMarker
 {
@@ -103,8 +107,6 @@ namespace AutoJailMarker
 				ExecuteCommand(chatQueue.Dequeue(), true);
 
 			commandReady = true;
-			
-
         }
 
 		public static void QueueCommand(string command)
@@ -175,6 +177,37 @@ namespace AutoJailMarker
 				8 or (>= 13 and <= 20) or (>= 91 and <= 119 and not 116) => true,
 				_ => false,
 			};
+        }
+
+		//Party Member Stuff
+		public static int GetPartySize()
+        {
+			var l = DalamudApi.PartyList.Length;
+			return l;
+        }
+
+		public static PartyMember GetPCharFromId(uint id)
+        {
+			foreach(PartyMember p in DalamudApi.PartyList)
+            {
+				if (p.ObjectId == id) return p;
+            }
+			return null;
+        }
+
+		public static bool IsIdInParty(ulong id)
+        {
+            if (AutoJailMarker.PlayerExists)
+            {
+				foreach(PartyMember p in DalamudApi.PartyList)
+                {
+					if(p?.GameObject.ObjectId == (uint)id)
+                    {
+						return true;
+                    }
+                }
+            }
+			return false;
         }
 
 		public static unsafe AtkUnitBase* GetAddonStructByName(string name, int index)

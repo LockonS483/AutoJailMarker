@@ -3,24 +3,24 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoJailMarker", "SamplePlugin\AutoJailMarker.csproj", "{13C812E9-0D42-4B95-8646-40EEBF30636F}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UIDev", "UIDev\UIDev.csproj", "{4FEC9558-EB25-419F-B86E-51B8CFDA32B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoJailMarker", "AutoJailMarker\AutoJailMarker.csproj", "{11FB88E1-F08C-4714-9CFA-176D734C8321}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{13C812E9-0D42-4B95-8646-40EEBF30636F}.Debug|x64.ActiveCfg = Debug|x64
-		{13C812E9-0D42-4B95-8646-40EEBF30636F}.Debug|x64.Build.0 = Debug|x64
-		{13C812E9-0D42-4B95-8646-40EEBF30636F}.Release|x64.ActiveCfg = Release|x64
-		{13C812E9-0D42-4B95-8646-40EEBF30636F}.Release|x64.Build.0 = Release|x64
-		{4FEC9558-EB25-419F-B86E-51B8CFDA32B7}.Debug|x64.ActiveCfg = Debug|x64
-		{4FEC9558-EB25-419F-B86E-51B8CFDA32B7}.Debug|x64.Build.0 = Debug|x64
-		{4FEC9558-EB25-419F-B86E-51B8CFDA32B7}.Release|x64.ActiveCfg = Release|x64
-		{4FEC9558-EB25-419F-B86E-51B8CFDA32B7}.Release|x64.Build.0 = Release|x64
+		{11FB88E1-F08C-4714-9CFA-176D734C8321}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11FB88E1-F08C-4714-9CFA-176D734C8321}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11FB88E1-F08C-4714-9CFA-176D734C8321}.Debug|x64.ActiveCfg = Debug|x64
+		{11FB88E1-F08C-4714-9CFA-176D734C8321}.Debug|x64.Build.0 = Debug|x64
+		{11FB88E1-F08C-4714-9CFA-176D734C8321}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11FB88E1-F08C-4714-9CFA-176D734C8321}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11FB88E1-F08C-4714-9CFA-176D734C8321}.Release|x64.ActiveCfg = Release|x64
+		{11FB88E1-F08C-4714-9CFA-176D734C8321}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

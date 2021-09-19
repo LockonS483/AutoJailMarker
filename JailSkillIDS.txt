@@ -1,0 +1,12 @@
+----Titan EX----
+Rock Throw:
+645
+1652
+
+Auto Attack:
+872
+
+----UWU Titan----
+Rock Throw:
+11115
+11116

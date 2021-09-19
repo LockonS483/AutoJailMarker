@@ -29,6 +29,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Visible>false</Visible>
     </Content>
+	<Content Include="..\Data\Titanos_45.png">
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		<Visible>false</Visible>
+	</Content>
   </ItemGroup>
 
   <PropertyGroup>

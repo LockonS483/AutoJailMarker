@@ -1,6 +1,7 @@
 ﻿using Dalamud.Configuration;
 using Dalamud.Plugin;
 using System;
+using System.Collections.Generic;
 
 namespace AutoJailMarker
 {
@@ -10,6 +11,9 @@ namespace AutoJailMarker
         public int Version { get; set; } = 0;
 
         public bool SomePropertyToBeSavedAndWithADefault { get; set; } = true;
+
+        public string prioTemp = "";
+        public string[] prio = { "","","","","","","","" };
 
         // the below exist just to make saving less cumbersome
 
