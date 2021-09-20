@@ -1,0 +1,12 @@
+{
+    "Author": "llock",
+    "Name": "Auto Jail Marker",
+    "Description": "Use /jailmarker to set up priority list",
+    "InternalName": "AutoJailMarker",
+    "RepoUrl": "https://github.com/LockonS483/AutoJailMarker",
+    "Tags": [
+        "titan",
+        "jails",
+        "uwu"
+    ]
+}

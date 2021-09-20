@@ -31,7 +31,7 @@ namespace AutoJailMarker
         public string Name => "Auto Jail Marker";
 
         private const string commandName = "/jailmarker";
-        public static uint collectionTimeout = 11000;
+        public static uint collectionTimeout = 15000;
         public static uint jailCount = 3;
         public static bool printSkillID = false;
 
@@ -151,7 +151,7 @@ namespace AutoJailMarker
                     {
                         NameInd tpair = new NameInd(Configuration.prio[i], (j+1));
                         PartyPrioList.Add(tpair);
-                        //PrintEcho($"Added {tpair.name} to NameInd list as {tpair.partynum.ToString()}. ");
+                        PrintEcho($"Added {tpair.name} to NameInd list as {tpair.partynum.ToString()}. ");
                         break;
                     }
                 }
@@ -190,58 +190,58 @@ namespace AutoJailMarker
             if (psize < 1) return;
             Utf8String uStr = partyMembers.PartyMember0.Name->NodeText;
             string str = UIHelper.utf8tostring(uStr);
-            str = str.Substring(4);
+            str = str.Substring(14);
             orderedPartyList.Add(str);
-            //PrintEcho(str);
+            PrintEcho(str);
 
             if (psize < 2) return;
             uStr = partyMembers.PartyMember1.Name->NodeText;
             str = UIHelper.utf8tostring(uStr);
-            str = str.Substring(4);
+            str = str.Substring(14);
             orderedPartyList.Add(str);
-            //PrintEcho(str);
+            PrintEcho(str);
 
             if (psize < 3) return;
             uStr = partyMembers.PartyMember2.Name->NodeText;
             str = UIHelper.utf8tostring(uStr);
-            str = str.Substring(4);
+            str = str.Substring(14);
             orderedPartyList.Add(str);
-            //PrintEcho(str);
+            PrintEcho(str);
 
             if (psize < 4) return;
             uStr = partyMembers.PartyMember3.Name->NodeText;
             str = UIHelper.utf8tostring(uStr);
-            str = str.Substring(4);
+            str = str.Substring(14);
             orderedPartyList.Add(str);
-            //PrintEcho(str);
+            PrintEcho(str);
 
             if (psize < 5) return;
             uStr = partyMembers.PartyMember4.Name->NodeText;
             str = UIHelper.utf8tostring(uStr);
-            str = str.Substring(4);
+            str = str.Substring(14);
             orderedPartyList.Add(str);
-            //PrintEcho(str);
+            PrintEcho(str);
 
             if (psize < 6) return;
             uStr = partyMembers.PartyMember5.Name->NodeText;
             str = UIHelper.utf8tostring(uStr);
-            str = str.Substring(4);
+            str = str.Substring(14);
             orderedPartyList.Add(str);
-            //PrintEcho(str);
+            PrintEcho(str);
 
             if (psize < 7) return;
             uStr = partyMembers.PartyMember6.Name->NodeText;
             str = UIHelper.utf8tostring(uStr);
-            str = str.Substring(4);
+            str = str.Substring(14);
             orderedPartyList.Add(str);
-            //PrintEcho(str);
+            PrintEcho(str);
 
             if (psize < 8) return;
             uStr = partyMembers.PartyMember7.Name->NodeText;
             str = UIHelper.utf8tostring(uStr);
-            str = str.Substring(4);
+            str = str.Substring(14);
             orderedPartyList.Add(str);
-            //PrintEcho(str);
+            PrintEcho(str);
         }
 
         public void ClearMarkers()

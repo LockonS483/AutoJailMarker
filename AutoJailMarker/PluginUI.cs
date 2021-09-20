@@ -77,6 +77,12 @@ namespace AutoJailMarker
                     }
                 }
 
+                if (ImGui.Button("try mark"))
+                {
+                    Game.ExecuteCommand("/mk attack1 <1>");
+                    Game.ExecuteCommand("/mk attack2 <2>");
+                    Game.ExecuteCommand("/mk attack3 <3>");
+                }
                 if (ImGui.Button("try partylist"))
                 {
                     parent.UpdateOrderedParty();
