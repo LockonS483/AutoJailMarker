@@ -143,11 +143,13 @@ namespace AutoJailMarker
             int playersMarked = 0;
             List<NameInd> PartyPrioList = new List<NameInd>();
             UpdateOrderedParty();
+            //PrintEcho($"ordered party list size: {orderedPartyList.Count}");
             for(int i=0; i<8; i++)
             {
                 for(int j=0; j<orderedPartyList.Count; j++)
                 {
-                    if(orderedPartyList[j] == Configuration.prio[i])
+                    //PrintEcho($"{Configuration.prio[i]} <> {orderedPartyList[j]}");
+                    if(orderedPartyList[j].Contains(Configuration.prio[i]))
                     {
                         NameInd tpair = new NameInd(Configuration.prio[i], (j+1));
                         PartyPrioList.Add(tpair);
@@ -173,8 +175,7 @@ namespace AutoJailMarker
                     {
                         break;
                     }
-                }
-                PrintEcho($"--> NOT FOUND");
+                } else PrintEcho($"--> NOT FOUND");
             }
 
 
@@ -190,56 +191,56 @@ namespace AutoJailMarker
             if (psize < 1) return;
             Utf8String uStr = partyMembers.PartyMember0.Name->NodeText;
             string str = UIHelper.utf8tostring(uStr);
-            str = str.Substring(14);
+            str = str.Substring( (UIHelper.FindFirstSpace(str) + 1) );
             orderedPartyList.Add(str);
             PrintEcho(str);
 
             if (psize < 2) return;
             uStr = partyMembers.PartyMember1.Name->NodeText;
             str = UIHelper.utf8tostring(uStr);
-            str = str.Substring(14);
+            str = str.Substring((UIHelper.FindFirstSpace(str) + 1));
             orderedPartyList.Add(str);
             PrintEcho(str);
 
             if (psize < 3) return;
             uStr = partyMembers.PartyMember2.Name->NodeText;
             str = UIHelper.utf8tostring(uStr);
-            str = str.Substring(14);
+            str = str.Substring((UIHelper.FindFirstSpace(str) + 1));
             orderedPartyList.Add(str);
             PrintEcho(str);
 
             if (psize < 4) return;
             uStr = partyMembers.PartyMember3.Name->NodeText;
             str = UIHelper.utf8tostring(uStr);
-            str = str.Substring(14);
+            str = str.Substring((UIHelper.FindFirstSpace(str) + 1));
             orderedPartyList.Add(str);
             PrintEcho(str);
 
             if (psize < 5) return;
             uStr = partyMembers.PartyMember4.Name->NodeText;
             str = UIHelper.utf8tostring(uStr);
-            str = str.Substring(14);
+            str = str.Substring((UIHelper.FindFirstSpace(str) + 1));
             orderedPartyList.Add(str);
             PrintEcho(str);
 
             if (psize < 6) return;
             uStr = partyMembers.PartyMember5.Name->NodeText;
             str = UIHelper.utf8tostring(uStr);
-            str = str.Substring(14);
+            str = str.Substring((UIHelper.FindFirstSpace(str) + 1));
             orderedPartyList.Add(str);
             PrintEcho(str);
 
             if (psize < 7) return;
             uStr = partyMembers.PartyMember6.Name->NodeText;
             str = UIHelper.utf8tostring(uStr);
-            str = str.Substring(14);
+            str = str.Substring((UIHelper.FindFirstSpace(str) + 1));
             orderedPartyList.Add(str);
             PrintEcho(str);
 
             if (psize < 8) return;
             uStr = partyMembers.PartyMember7.Name->NodeText;
             str = UIHelper.utf8tostring(uStr);
-            str = str.Substring(14);
+            str = str.Substring((UIHelper.FindFirstSpace(str) + 1));
             orderedPartyList.Add(str);
             PrintEcho(str);
         }

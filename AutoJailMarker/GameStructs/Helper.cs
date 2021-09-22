@@ -24,6 +24,17 @@ namespace AutoJailMarker.Helper
             return str;
         }
 
+        public unsafe static int FindFirstSpace(string s)
+        {
+            for(int i=0; i<s.Length; i++)
+            {
+                char c = s[i];
+                if ((s[i]) == ' ') return i;
+            }
+
+            return 0;
+        }
+
         public static AddonPartyList* PartyListAddon => (AddonPartyList*)AtkStage.GetSingleton()->RaptureAtkUnitManager->GetAddonByName("_PartyList");
     }
 }
