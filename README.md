@@ -1,5 +1,5 @@
 # UWU Jail Automarker
-Scuffed Jail Automarkers that injects marking commands instead of using macros.
+Scuffed Jail Automarkers that doesn't require macros or not using modifier keys
 
 ## How To Install
 * Use /xlplugins to open the plugin menu
