@@ -2,22 +2,21 @@
     {
         "Author": "llock",
         "Name": "Auto Jail Marker",
+        "Description": "Use /jailmarker to set up priority list",
         "InternalName": "AutoJailMarker",
         "AssemblyVersion": "2.1.4.2",
-        "Description": "Use /jailmarker to set up priority list",
-        "ApplicableVersion": "any",
         "RepoUrl": "https://github.com/LockonS483/AutoJailMarker",
+        "ApplicableVersion": "any",
         "Tags": [
             "titan",
             "jails",
             "uwu"
         ],
         "DalamudApiLevel": 4,
-        "LoadPriority": 0,
         "IsHide": "False",
         "IsTestingExclusive": "False",
         "LastUpdated": 1631012003,
-        "DownloadCount": 0,
+        "DownloadCount": 1,
         "DownloadLinkInstall": "https://github.com/LockonS483/AutoJailMarker/releases/download/2.1.4.2/AutoJailMarker.zip",
         "DownloadLinkTesting": "https://github.com/LockonS483/AutoJailMarker/releases/download/2.1.4.2/AutoJailMarker.zip",
         "DownloadLinkUpdate": "https://github.com/LockonS483/AutoJailMarker/releases/download/2.1.4.2/AutoJailMarker.zip"
