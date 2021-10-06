@@ -35,9 +35,11 @@
     <PackageReference Include="DalamudPackager" Version="2.1.2" />
     <Reference Include="Dalamud">
       <HintPath>..\..\..\..\AppData\Roaming\XIVLauncher\addon\Hooks\dev\Dalamud.dll</HintPath>
+	  <Private>false</Private>
     </Reference>
     <Reference Include="FFXIVClientStructs">
       <HintPath>..\..\..\..\AppData\Roaming\XIVLauncher\addon\Hooks\dev\FFXIVClientStructs.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(DalamudLibPath)Newtonsoft.Json.dll</HintPath>
