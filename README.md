@@ -1,5 +1,6 @@
 # UWU Jail Automarker
 Scuffed Jail Automarkers that doesn't require macros or not using modifier keys
+This is intended to be used with api4
 
 ## How To Install
 * Enable dalamud test by using /xldev, clicking the Dalamud tab at the top left, and checking "Enable Dalamud Testing"
