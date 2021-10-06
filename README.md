@@ -7,5 +7,5 @@ Scuffed Jail Automarkers that injects marking commands instead of using macros.
 * Add https://raw.githubusercontent.com/LockonS483/AutoJailMarker/master/AutoJailMarker/repo.json to the Custom Plugin Repositories list and click the '+' button
 * Restart the game and Auto Jail Marker should appear in the available plugins list.
 
-### Main Points
+### Use
 * use /jailmarker and fill in the priority list.
