@@ -6,6 +6,7 @@ See at https://github.com/goatcorp/FFXIVQuickLauncher.
 
 ## How To Install
 * Enable dalamud test by using /xldev, clicking the Dalamud tab at the top left, and checking "Enable Dalamud Testing"
+** this should no longer be required after Oct 10, 2021 when api4 becomes the stable release
 * Restart the game with the launcher
 * Use /xlplugins to open the plugin menu
 * Click the Settings button at the bottom and go to the Experimental tab
