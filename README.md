@@ -6,9 +6,9 @@ See at https://github.com/goatcorp/FFXIVQuickLauncher.
 
 ## How To Install
 * Enable dalamud test by using /xldev, clicking the Dalamud tab at the top left, and checking "Enable Dalamud Testing"
-
-    *this should no longer be required after Oct 10, 2021 when api4 becomes the stable release*
 * Restart the game with the launcher
+
+*steps before this should no longer be required after Oct 10, 2021 when api4 becomes the stable release*
 * Use /xlplugins to open the plugin menu
 * Click the Settings button at the bottom and go to the Experimental tab
 * Add https://raw.githubusercontent.com/LockonS483/AutoJailMarker/master/AutoJailMarker/repo.json to the Custom Plugin Repositories list and click the '+' button
