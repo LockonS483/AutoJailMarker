@@ -84,6 +84,7 @@ namespace AutoJailMarker
             this.Configuration = this.PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
             this.Configuration.Initialize(this.PluginInterface);
 
+
             IntPtr receiveActionEffectFuncPtr = SigScanner.ScanText("4C 89 44 24 18 53 56 57 41 54 41 57 48 81 EC ?? 00 00 00 8B F9"); //ocealot
             ReceiveActionEffectHook = new Hook<ReceiveActionEffectDelegate>(receiveActionEffectFuncPtr, ReceiveActionEffect);
             ReceiveActionEffectHook.Enable();
@@ -278,6 +279,7 @@ namespace AutoJailMarker
         private void DrawConfigUI()
         {
             this.PluginUi.SettingsVisible = true;
+            this.PluginUi.Visible = !this.PluginUi.Visible;
         }
 
         public static void PrintEcho(string message) => DalamudApi.ChatGui.Print($"[JailMarker] {message}");
