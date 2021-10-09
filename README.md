@@ -5,7 +5,6 @@ This is intended to be used with xivlauncher/Dalamud api4.
 See at https://github.com/goatcorp/FFXIVQuickLauncher.
 
 ## How To Install
-* Ensure that your Dalamud version is at least 6.0+
 * Use /xlplugins to open the plugin menu
 * Click the Settings button at the bottom and go to the Experimental tab
 * Add https://raw.githubusercontent.com/LockonS483/AutoJailMarker/master/AutoJailMarker/repo.json to the Custom Plugin Repositories list and click the '+' button
