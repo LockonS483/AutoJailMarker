@@ -179,13 +179,6 @@ namespace AutoJailMarker
 			};
         }
 
-		//Party Member Stuff
-		public static int GetPartySize()
-        {
-			var l = DalamudApi.PartyList.Length;
-			return l;
-        }
-
 		public static PartyMember GetPCharFromId(uint id)
         {
 			foreach(PartyMember p in DalamudApi.PartyList)

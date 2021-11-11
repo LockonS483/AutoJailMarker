@@ -8,8 +8,7 @@ using Dalamud.Game.ClientState.Party;
 
 namespace AutoJailMarker
 {
-    // It is good to have this be disposable in general, in case you ever need it
-    // to do any cleanup
+    // It is good to have this be disposable in general, in case you ever need it to do any cleanup
     class PluginUI : IDisposable
     {
         private Configuration configuration;
@@ -64,7 +63,6 @@ namespace AutoJailMarker
             {
                 return;
             }
-
             ImGui.SetNextWindowSize(new Vector2(375, 330), ImGuiCond.FirstUseEver);
             ImGui.SetNextWindowSizeConstraints(new Vector2(375, 330), new Vector2(float.MaxValue, float.MaxValue));
             if (ImGui.Begin("Auto Jail Markers", ref this.visible, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
@@ -88,7 +86,7 @@ namespace AutoJailMarker
                     parent.UpdateOrderedParty();
                 }
 
-                ImGui.Text($"Current party size: {DalamudApi.PartyList.Length.ToString()}");
+                //ImGui.Text($"Current party size: {DalamudApi.PartyList.Length.ToString()}");
                 if (AutoJailMarker.PlayerExists)
                 {
                     foreach(PartyMember p in DalamudApi.PartyList)
@@ -106,8 +104,8 @@ namespace AutoJailMarker
                 ImGui.Image(this.goatImage.ImGuiHandle, new Vector2(this.goatImage.Width, this.goatImage.Height));
                 ImGui.Unindent(10);
 
-                ImGui.Text($"isCollecting: {parent.isCollecting.ToString()}");
-                ImGui.Text($"Marked: {parent.marked.ToString()}");
+                //ImGui.Text($"isCollecting: {parent.isCollecting.ToString()}");
+                //ImGui.Text($"Marked: {parent.marked.ToString()}");
             }
             ImGui.End();
         }

@@ -58,9 +58,6 @@ namespace AutoJailMarker
 
         public static bool PlayerExists => DalamudApi.ClientState?.LocalPlayer != null;
 
-        //Party stuff
-        public int currentPartySize = 1;
-
         private bool pluginReady = false;
 
         //actioneffect
@@ -117,7 +114,6 @@ namespace AutoJailMarker
             if (!pluginReady) return;
 
             Game.ReadyCommand();
-            this.currentPartySize = Game.GetPartySize();
 
             //ocealot
             if (isCollecting || marked)
