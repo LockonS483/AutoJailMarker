@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-	<AssemblyVersion>2.1.4.3</AssemblyVersion>
+	<AssemblyVersion>2.2.0.0</AssemblyVersion>
     <TargetFramework>net5.0-windows</TargetFramework>
     <Platforms>x64;AnyCPU</Platforms>
     <LangVersion>9.0</LangVersion>

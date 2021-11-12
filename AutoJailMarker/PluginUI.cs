@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using AutoJailMarker;
+using Dalamud.Game.ClientState;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Party;
 
@@ -86,7 +87,7 @@ namespace AutoJailMarker
                     parent.UpdateOrderedParty();
                 }
 
-                //ImGui.Text($"Current party size: {DalamudApi.PartyList.Length.ToString()}");
+                ImGui.Text($"Current territory: {DalamudApi.ClientState.TerritoryType}, {(DalamudApi.ClientState.TerritoryType == 777)}");
                 if (AutoJailMarker.PlayerExists)
                 {
                     foreach(PartyMember p in DalamudApi.PartyList)

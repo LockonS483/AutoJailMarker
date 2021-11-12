@@ -192,13 +192,15 @@ namespace AutoJailMarker
         {
             if (AutoJailMarker.PlayerExists)
             {
-				foreach(PartyMember p in DalamudApi.PartyList)
-                {
-					if(p?.GameObject.ObjectId == (uint)id)
-                    {
-						return true;
-                    }
-                }
+				if (DalamudApi.ClientState.TerritoryType == 777) {
+					foreach (PartyMember p in DalamudApi.PartyList)
+					{
+						if (p?.GameObject.ObjectId == (uint)id)
+						{
+							return true;
+						}
+					}
+				}
             }
 			return false;
         }
