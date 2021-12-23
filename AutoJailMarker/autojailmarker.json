@@ -3,11 +3,13 @@
     "Name": "Auto Jail Marker",
     "Description": "Use /jailmarker to set up priority list",
     "InternalName": "AutoJailMarker",
-    "RepoUrl": "https://github.com/LockonS483/AutoJailMarker",
     "Tags": [
         "titan",
         "jails",
         "uwu"
     ],
-    "IconUrl": "https://raw.githubusercontent.com/LockonS483/AutoJailMarker/master/Data/TitIco.png"
+    "IconUrl": "https://raw.githubusercontent.com/LockonS483/AutoJailMarker/master/Data/TitIco.png",
+    "RepoUrl": "https://github.com/LockonS483/AutoJailMarker",
+    "ApplicableVersion": "any",
+    "DalamudApiLevel":  5
 }
