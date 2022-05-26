@@ -195,7 +195,7 @@ namespace AutoJailMarker
 				if (DalamudApi.ClientState.TerritoryType == 777) {
 					foreach (PartyMember p in DalamudApi.PartyList)
 					{
-						if (p?.GameObject.ObjectId == (uint)id)
+						if (p.GameObject?.ObjectId == (uint)id)
 						{
 							return true;
 						}
