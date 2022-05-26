@@ -255,9 +255,12 @@ namespace AutoJailMarker
 
         public void Dispose()
         {
-            this.PluginUi.Dispose();
-            this.CommandManager.RemoveHandler(commandName);
+            ReceiveActionEffectHook.Dispose();
+            PluginUi.Dispose();
             DalamudApi.Framework.Update -= Update;
+            CommandManager.RemoveHandler(commandName);
+            PluginInterface.UiBuilder.Draw -= DrawUI;
+            PluginInterface.UiBuilder.OpenConfigUi -= DrawConfigUI;
 
         }
 
