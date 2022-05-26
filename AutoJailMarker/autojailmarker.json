@@ -2,6 +2,7 @@
     "Author": "llock",
     "Name": "Auto Jail Marker",
     "Description": "Use /jailmarker to set up priority list",
+    "Punchline": "Use /jailmarker to set up priority list",
     "InternalName": "AutoJailMarker",
     "Tags": [
         "titan",
