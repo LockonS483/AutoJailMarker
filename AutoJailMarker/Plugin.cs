@@ -179,67 +179,39 @@ namespace AutoJailMarker
             //PrintEcho("Finished Marking");
             marked = true;
         }
+        
         public unsafe void UpdateOrderedParty()
         {
             var partyMembers = UIHelper.PartyListAddon->PartyMember;
-            int psize = DalamudApi.PartyList.Length;
             orderedPartyList = new List<string>();
 
-            if (psize < 1) return;
-            Utf8String uStr = partyMembers.PartyMember0.Name->NodeText;
-            string str = UIHelper.utf8tostring(uStr);
-            str = str.Substring( (UIHelper.FindFirstSpace(str) + 1) );
-            orderedPartyList.Add(str);
-            PrintEcho(str);
+            for (var i = 0; i < DalamudApi.PartyList.Length; i++)
+            {
+                var listLength = orderedPartyList.Count;
+                
+                var partyMember = partyMembers[i];
+                var aPartyMemberName = partyMember.Name->NodeText.ToString().Split(' ');
+                aPartyMemberName[3] = aPartyMemberName[3].Replace(".", "");
 
-            if (psize < 2) return;
-            uStr = partyMembers.PartyMember1.Name->NodeText;
-            str = UIHelper.utf8tostring(uStr);
-            str = str.Substring((UIHelper.FindFirstSpace(str) + 1));
-            orderedPartyList.Add(str);
-            PrintEcho(str);
+                foreach (var partyListMember in DalamudApi.PartyList)
+                {
+                    var partyListName = partyListMember.Name.TextValue;
+                    var aPartyListMemberName = partyListName.Split(' ');
+                    
+                    if(aPartyListMemberName[0] != aPartyMemberName[2]) continue;
+                    if(!aPartyListMemberName[1].StartsWith(aPartyMemberName[3])) continue;
+                    
+                    orderedPartyList.Add(partyListName);
+                    PrintEcho(partyListName);
+                    break;
+                }
 
-            if (psize < 3) return;
-            uStr = partyMembers.PartyMember2.Name->NodeText;
-            str = UIHelper.utf8tostring(uStr);
-            str = str.Substring((UIHelper.FindFirstSpace(str) + 1));
-            orderedPartyList.Add(str);
-            PrintEcho(str);
-
-            if (psize < 4) return;
-            uStr = partyMembers.PartyMember3.Name->NodeText;
-            str = UIHelper.utf8tostring(uStr);
-            str = str.Substring((UIHelper.FindFirstSpace(str) + 1));
-            orderedPartyList.Add(str);
-            PrintEcho(str);
-
-            if (psize < 5) return;
-            uStr = partyMembers.PartyMember4.Name->NodeText;
-            str = UIHelper.utf8tostring(uStr);
-            str = str.Substring((UIHelper.FindFirstSpace(str) + 1));
-            orderedPartyList.Add(str);
-            PrintEcho(str);
-
-            if (psize < 6) return;
-            uStr = partyMembers.PartyMember5.Name->NodeText;
-            str = UIHelper.utf8tostring(uStr);
-            str = str.Substring((UIHelper.FindFirstSpace(str) + 1));
-            orderedPartyList.Add(str);
-            PrintEcho(str);
-
-            if (psize < 7) return;
-            uStr = partyMembers.PartyMember6.Name->NodeText;
-            str = UIHelper.utf8tostring(uStr);
-            str = str.Substring((UIHelper.FindFirstSpace(str) + 1));
-            orderedPartyList.Add(str);
-            PrintEcho(str);
-
-            if (psize < 8) return;
-            uStr = partyMembers.PartyMember7.Name->NodeText;
-            str = UIHelper.utf8tostring(uStr);
-            str = str.Substring((UIHelper.FindFirstSpace(str) + 1));
-            orderedPartyList.Add(str);
-            PrintEcho(str);
+                if (listLength != orderedPartyList.Count) continue;
+                
+                var partyMemberName = $"{aPartyMemberName[2]} {aPartyMemberName[3]}";
+                orderedPartyList.Add(partyMemberName);
+                PrintEcho(partyMemberName);
+            }
         }
 
         public void ClearMarkers()
@@ -255,9 +227,12 @@ namespace AutoJailMarker
 
         public void Dispose()
         {
-            this.PluginUi.Dispose();
-            this.CommandManager.RemoveHandler(commandName);
+            ReceiveActionEffectHook.Dispose();
+            PluginUi.Dispose();
             DalamudApi.Framework.Update -= Update;
+            CommandManager.RemoveHandler(commandName);
+            PluginInterface.UiBuilder.Draw -= DrawUI;
+            PluginInterface.UiBuilder.OpenConfigUi -= DrawConfigUI;
 
         }
 

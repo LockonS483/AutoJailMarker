@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-	<AssemblyVersion>2.3.0.1</AssemblyVersion>
+	<AssemblyVersion>2.3.1.0</AssemblyVersion>
     <TargetFramework>net5.0-windows</TargetFramework>
     <Platforms>x64;AnyCPU</Platforms>
     <LangVersion>9.0</LangVersion>
@@ -32,13 +32,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DalamudPackager" Version="2.1.5" />
+    <PackageReference Include="DalamudPackager" Version="2.1.7" />
     <Reference Include="Dalamud">
-      <HintPath>..\..\..\..\AppData\Roaming\XIVLauncher\addon\Hooks\dev\Dalamud.dll</HintPath>
+      <HintPath>$(DalamudLibPath)Dalamud.dll</HintPath>
 	  <Private>false</Private>
     </Reference>
     <Reference Include="FFXIVClientStructs">
-      <HintPath>..\..\..\..\AppData\Roaming\XIVLauncher\addon\Hooks\dev\FFXIVClientStructs.dll</HintPath>
+      <HintPath>$(DalamudLibPath)FFXIVClientStructs.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
