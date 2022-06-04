@@ -1,7 +1,5 @@
 ﻿using Dalamud.Configuration;
-using Dalamud.Plugin;
 using System;
-using System.Collections.Generic;
 
 namespace AutoJailMarker
 {
@@ -10,24 +8,22 @@ namespace AutoJailMarker
     {
         public int Version { get; set; } = 0;
 
-        public bool SomePropertyToBeSavedAndWithADefault { get; set; } = true;
-
-        public string prioTemp = "";
-        public string[] prio = { "","","","","","","","" };
-
-        // the below exist just to make saving less cumbersome
-
-        [NonSerialized]
-        private DalamudPluginInterface? pluginInterface;
-
-        public void Initialize(DalamudPluginInterface pluginInterface)
-        {
-            this.pluginInterface = pluginInterface;
-        }
+        public string[] Prio = { "","","","","","","","" };
 
         public void Save()
         {
-            this.pluginInterface!.SavePluginConfig(this);
+            DalamudApi.PluginInterface.SavePluginConfig(this);
+        }
+        
+        /// <summary>
+        /// Swaps two entries in Prio
+        /// </summary>
+        /// <param name="i">Current index in Prio</param>
+        /// <param name="iNew">New index in Prio</param>
+        public void MovePrio(int i, int iNew)
+        {
+            (Prio[i], Prio[iNew]) = (Prio[iNew], Prio[i]);
+            Save();
         }
     }
 }

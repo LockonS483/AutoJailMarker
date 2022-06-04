@@ -54,7 +54,7 @@ namespace AutoJailMarker
         public bool titanLocked = false;
         private GameObject titanLastTarget { get; set; }
         public string titanName { get => myTitan == null ? myTitan.Name.ToString() : ""; }
-        private PluginUI PluginUi { get; init; }
+        private PluginUi PluginUi { get; init; }
 
         public static bool PlayerExists => DalamudApi.ClientState?.LocalPlayer != null;
 
@@ -79,7 +79,6 @@ namespace AutoJailMarker
             if (!FFXIVClientStructs.Resolver.Initialized) FFXIVClientStructs.Resolver.Initialize(); //ocealot
 
             this.Configuration = this.PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
-            this.Configuration.Initialize(this.PluginInterface);
 
 
             IntPtr receiveActionEffectFuncPtr = SigScanner.ScanText("4C 89 44 24 ?? 55 56 57 41 54 41 55 41 56 48 8D 6C 24"); //ocealot
@@ -90,7 +89,7 @@ namespace AutoJailMarker
             var assemblyLocation = Assembly.GetExecutingAssembly().Location;
             var imagePath = Path.Combine(Path.GetDirectoryName(assemblyLocation)!, "Titanos_45.png");
             var goatImage = this.PluginInterface.UiBuilder.LoadImage(imagePath);
-            this.PluginUi = new PluginUI(this.Configuration, goatImage, this);
+            PluginUi = new PluginUi(this.Configuration, goatImage, this);
 
             DalamudApi.Framework.Update += Update;
             Game.Initialize();
@@ -146,9 +145,9 @@ namespace AutoJailMarker
                 for(int j=0; j<orderedPartyList.Count; j++)
                 {
                     //PrintEcho($"{Configuration.prio[i]} <> {orderedPartyList[j]}");
-                    if(orderedPartyList[j].Contains(Configuration.prio[i]))
+                    if(orderedPartyList[j].Contains(Configuration.Prio[i]))
                     {
-                        NameInd tpair = new NameInd(Configuration.prio[i], (j+1));
+                        NameInd tpair = new NameInd(Configuration.Prio[i], (j+1));
                         PartyPrioList.Add(tpair);
                         PrintEcho($"Added {tpair.name} to NameInd list as {tpair.partynum.ToString()}. ");
                         break;
@@ -180,7 +179,7 @@ namespace AutoJailMarker
             marked = true;
         }
         
-        public unsafe void UpdateOrderedParty()
+        public unsafe void UpdateOrderedParty(bool echo = true)
         {
             var partyMembers = UIHelper.PartyListAddon->PartyMember;
             orderedPartyList = new List<string>();
@@ -202,7 +201,7 @@ namespace AutoJailMarker
                     if(!aPartyListMemberName[1].StartsWith(aPartyMemberName[3])) continue;
                     
                     orderedPartyList.Add(partyListName);
-                    PrintEcho(partyListName);
+                    if(echo) PrintEcho(partyListName);
                     break;
                 }
 
@@ -210,7 +209,7 @@ namespace AutoJailMarker
                 
                 var partyMemberName = $"{aPartyMemberName[2]} {aPartyMemberName[3]}";
                 orderedPartyList.Add(partyMemberName);
-                PrintEcho(partyMemberName);
+                if(echo) PrintEcho(partyMemberName);
             }
         }
 
@@ -239,7 +238,7 @@ namespace AutoJailMarker
         private void OnCommand(string command, string args)
         {
             // in response to the slash command, just display our main ui
-            this.PluginUi.Visible = true;
+            PluginUi.SettingsVisible = true;
         }
 
         private void DrawUI()
@@ -249,8 +248,7 @@ namespace AutoJailMarker
 
         private void DrawConfigUI()
         {
-            this.PluginUi.SettingsVisible = true;
-            this.PluginUi.Visible = !this.PluginUi.Visible;
+            PluginUi.SettingsVisible = !PluginUi.SettingsVisible;
         }
 
         public static void PrintEcho(string message) => DalamudApi.ChatGui.Print($"[JailMarker] {message}");
