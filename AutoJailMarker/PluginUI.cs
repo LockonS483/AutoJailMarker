@@ -198,7 +198,7 @@ namespace AutoJailMarker
             {
                 if (ImGui.Button("Check Partyprio"))
                 {
-                    autoJailMarker.UpdateOrderedParty(false);
+                    autoJailMarker.UpdateOrderedParty(true);
 
                     var rnd = new Random();
 
@@ -227,6 +227,8 @@ namespace AutoJailMarker
 
                         if (prio.Count == 0) break;
                     }
+
+                    AutoJailMarker.PrintEcho("Testing Random Party Selection:");
 
                     var markCount = 0;
                     var markText = new[] { "First", "Second", "Third" };

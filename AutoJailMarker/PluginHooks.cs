@@ -18,7 +18,6 @@ namespace AutoJailMarker
                 ReceiveActionEffectHook.Original(sourceId, sourceCharacter, pos, effectHeader, effectArray, effectTrail);
                 return;
             }
-
             //Character source = Game.GetCharFromPtr(sourceCharacter);
 
             uint id = *((uint*)effectHeader.ToPointer() + 0x2);
@@ -75,7 +74,6 @@ namespace AutoJailMarker
                     targetsParty = true;
                 }
             }
-
 
             if (targetsParty)
             {   

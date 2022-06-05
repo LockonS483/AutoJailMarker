@@ -138,7 +138,7 @@ namespace AutoJailMarker
             PrintEcho("---Marking Players---");
             int playersMarked = 0;
             List<NameInd> PartyPrioList = new List<NameInd>();
-            UpdateOrderedParty();
+            UpdateOrderedParty(false);
             //PrintEcho($"ordered party list size: {orderedPartyList.Count}");
             for(int i=0; i<8; i++)
             {
@@ -181,29 +181,17 @@ namespace AutoJailMarker
         
         public unsafe void UpdateOrderedParty(bool echo = true)
         {
-            var partyMembers = UIHelper.PartyListAddon->PartyMember;
             orderedPartyList = new List<string>();
-
+            if(echo) PrintEcho($"Updating party list order:");
             for (var i = 0; i < DalamudApi.PartyList.Length; i++)
-            {
+            {   
                 var listLength = orderedPartyList.Count;
-                
-                var partyMember = partyMembers[i];
-                var aPartyMemberName = partyMember.Name->NodeText.ToString().Split(' ');
-                aPartyMemberName[3] = aPartyMemberName[3].Replace(".", "");
 
-                foreach (var partyListMember in DalamudApi.PartyList)
-                {
-                    var partyListName = partyListMember.Name.TextValue;
-                    var aPartyListMemberName = partyListName.Split(' ');
-                    
-                    if(aPartyListMemberName[0] != aPartyMemberName[2]) continue;
-                    if(!aPartyListMemberName[1].StartsWith(aPartyMemberName[3])) continue;
-                    
-                    orderedPartyList.Add(partyListName);
-                    if(echo) PrintEcho(partyListName);
-                    break;
-                }
+                PartyMember partyMember = DalamudApi.PartyList[i];
+                var aPartyMemberName = partyMember.Name.ToString();
+
+                if(echo) PrintEcho($"{aPartyMemberName}");
+                orderedPartyList.Add(aPartyMemberName);
 
                 if (listLength != orderedPartyList.Count) continue;
                 
