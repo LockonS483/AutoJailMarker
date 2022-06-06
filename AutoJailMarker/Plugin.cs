@@ -22,6 +22,8 @@ using Dalamud.Logging;
 
 using AutoJailMarker.Helper;
 using FFXIVClientStructs.FFXIV.Client.System.String;
+using FFXIVClientStructs.FFXIV.Client.UI;
+using FFXIVClientStructs.FFXIV.Component.GUI;
 
 
 namespace AutoJailMarker
@@ -181,23 +183,42 @@ namespace AutoJailMarker
         
         public unsafe void UpdateOrderedParty(bool echo = true)
         {
+            AddonPartyList* plist = (AddonPartyList*)DalamudApi.GameGui.GetAddonByName("_PartyList", 1);
+            var partyMembers = plist->PartyMember;
+
             orderedPartyList = new List<string>();
             if(echo) PrintEcho($"Updating party list order:");
+
             for (var i = 0; i < DalamudApi.PartyList.Length; i++)
-            {   
+            {
                 var listLength = orderedPartyList.Count;
+                AddonPartyList.PartyListMemberStruct partyMember = partyMembers[i];
 
-                PartyMember partyMember = DalamudApi.PartyList[i];
-                var aPartyMemberName = partyMember.Name.ToString();
+                string[] aPartyMemberName = partyMember.Name->NodeText.ToString().Split(' ');
 
-                if(echo) PrintEcho($"{aPartyMemberName}");
-                orderedPartyList.Add(aPartyMemberName);
+                //aPartyMemberName[3] = aPartyMemberName[3].Replace(".", "");
+                for (var p = 0; p < aPartyMemberName.Length; p++)
+                {
+                    aPartyMemberName[p] = aPartyMemberName[p].Replace(".", "");
+                }
+
+                foreach (var partyListMember in DalamudApi.PartyList)
+                {
+                    var partyListName = partyListMember.Name.TextValue;
+                    var aPartyListMemberName = partyListName.Split(' ');
+
+                    if (aPartyListMemberName[0] != aPartyMemberName[1]) continue;
+                    if (!aPartyListMemberName[1].StartsWith(aPartyMemberName[2])) continue;
+
+                    orderedPartyList.Add(partyListName);
+                    if(echo) PrintEcho($"Added: {partyListName}");
+                    break;
+                }
 
                 if (listLength != orderedPartyList.Count) continue;
-                
+
                 var partyMemberName = $"{aPartyMemberName[2]} {aPartyMemberName[3]}";
                 orderedPartyList.Add(partyMemberName);
-                if(echo) PrintEcho(partyMemberName);
             }
         }
 

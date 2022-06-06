@@ -5,6 +5,10 @@ using FFXIVClientStructs.FFXIV.Component.GUI;
 using FFXIVClientStructs.FFXIV.Client.System.String;
 using System.Runtime.InteropServices;
 using Dalamud.Memory;
+using Dalamud.Game.Gui;
+using Dalamud.Data;
+using Dalamud.IoC;
+using Dalamud.Plugin;
 
 namespace AutoJailMarker.Helper
 {
@@ -34,7 +38,5 @@ namespace AutoJailMarker.Helper
 
             return 0;
         }
-
-        public static AddonPartyList* PartyListAddon => (AddonPartyList*)AtkStage.GetSingleton()->RaptureAtkUnitManager->GetAddonByName("_PartyList");
     }
 }

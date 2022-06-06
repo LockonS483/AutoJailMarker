@@ -192,7 +192,6 @@ namespace AutoJailMarker
         {
             if (AutoJailMarker.PlayerExists)
             {
-				int t = 0;
 				if (DalamudApi.ClientState.TerritoryType == 777 || DalamudApi.ClientState.TerritoryType == 296) {
 					foreach (PartyMember p in DalamudApi.PartyList)
 					{
