@@ -13,3 +13,6 @@ See at https://github.com/goatcorp/FFXIVQuickLauncher.
 
 ### Use
 * use /jailmarker and fill in the priority list.
+
+## Discord
+* If you have any questions or suggestions you can join the discord at https://discord.gg/4ejWrvgPum
