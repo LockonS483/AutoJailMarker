@@ -290,7 +290,10 @@ internal class AutoJailMarkerConfigWindow : IDisposable
         ImGui.Text("Options");
         ImGui.Indent(25 * ImGuiHelpers.GlobalScale);
 
-        ImGui.Checkbox("Complete Echo", ref config.FullEcho);
+        if (ImGui.Checkbox("Complete Echo", ref config.FullEcho))
+        {
+            config.Save();
+        }
         SetHoverTooltip("On: Output the full chat notifications\nOff: Output only the marked players");
 
         ImGui.Unindent(25 * ImGuiHelpers.GlobalScale);
