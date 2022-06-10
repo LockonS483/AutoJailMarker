@@ -59,7 +59,7 @@ internal class AutoJailMarkerConfigWindow : IDisposable
         ImGui.SetNextWindowSizeConstraints(minSize, new Vector2(float.MaxValue, float.MaxValue));
         if (ImGui.Begin("Auto Jail Markers", ref SettingsVisible))
         {
-            DrawPriorityTable();
+            DrawPriorityTable(partySize);
             DrawChecks(partySize);
             DrawOptionsSection();
             DrawInformation();
@@ -89,7 +89,7 @@ internal class AutoJailMarkerConfigWindow : IDisposable
     /// <summary>
     /// Draws the prio list table
     /// </summary>
-    private void DrawPriorityTable()
+    private void DrawPriorityTable(int partySize)
     {
         ImGui.Text("Priority Characters List");
         if (!string.IsNullOrEmpty(inlineError))
@@ -148,10 +148,43 @@ internal class AutoJailMarkerConfigWindow : IDisposable
 
             ImGui.EndTable();
         }
+        ImGui.Spacing();
+
+        DrawAutofillButton(partySize);
 
         ImGui.Unindent(25 * ImGuiHelpers.GlobalScale);
 
         ImGui.Spacing();
+    }
+
+    private void DrawAutofillButton(int partySize)
+    {
+        if (partySize > 2)
+        {
+            if (ImGui.Button("Autofill"))
+            {
+                autoJailMarkerPlugin.UpdateOrderedParty(false);
+
+                ChatManager.PrintEcho("Autofilling from party list.");
+                for (var i = 0; i < autoJailMarkerPlugin.OrderedPartyList.Count; i++)
+                {
+                    ChatManager.PrintEcho((i+1).ToString() + ": " + autoJailMarkerPlugin.OrderedPartyList[i]);
+                    config.Prio[i] = autoJailMarkerPlugin.OrderedPartyList[i];
+                }
+                config.Save();
+            }
+
+            SetHoverTooltip("Autofill from party list.");
+        }
+        else
+        {
+            ImGuiComponents.DisabledButton("Autofill");
+            var hoverText = partySize == 0
+                ? "Not in a party. Cross-World party are not supported"
+                : "Party size must be greater than 2";
+
+            SetHoverTooltip(hoverText);
+        }
     }
 
     /// <summary>
