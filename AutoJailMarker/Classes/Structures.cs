@@ -1,54 +1,37 @@
 ﻿using System;
-using System.Text;
 using System.Runtime.InteropServices;
+using System.Text;
 
-namespace AutoJailMarker.Structures
+namespace AutoJailMarker.Classes;
+
+public struct PartyIndex
 {
-    [StructLayout(LayoutKind.Sequential, Size = 0x68)]
-    public readonly struct UTF8String : IDisposable
+    public readonly string Name;
+    public readonly int Index;
+
+    public PartyIndex(string n, int i)
     {
-        public const int size = 0x68;
+        Name = n;
+        Index = i;
+    }
+}
 
-        public readonly IntPtr stringPtr;
-        public readonly ulong capacity;
-        public readonly ulong length;
-        public readonly ulong unknown;
-        public readonly byte isEmpty;
-        public readonly byte notReallocated; // Taking suggestions for a better name
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x40)]
-        public readonly byte[] str;
+[StructLayout(LayoutKind.Explicit)]
+public readonly struct ChatPayload : IDisposable
+{
+    [FieldOffset(0)] private readonly IntPtr textPtr;
 
-        public UTF8String(IntPtr loc, string text) : this(loc, Encoding.UTF8.GetBytes(text)) { }
+    internal ChatPayload(string text)
+    {
+        var stringBytes = Encoding.UTF8.GetBytes(text);
+        textPtr = Marshal.AllocHGlobal(stringBytes.Length + 30);
 
-        public UTF8String(IntPtr loc, byte[] text)
-        {
-            capacity = 0x40;
-            length = (ulong)text.Length + 1;
-            str = new byte[capacity];
+        Marshal.Copy(stringBytes, 0, textPtr, stringBytes.Length);
+        Marshal.WriteByte(textPtr + stringBytes.Length, 0);
+    }
 
-            if (length > capacity)
-            {
-                stringPtr = Marshal.AllocHGlobal(text.Length + 1);
-                capacity = length;
-                Marshal.Copy(text, 0, stringPtr, text.Length);
-                Marshal.WriteByte(stringPtr, text.Length, 0);
-                notReallocated = 0;
-            }
-            else
-            {
-                stringPtr = loc + 0x22;
-                text.CopyTo(str, 0);
-                notReallocated = 1;
-            }
-
-            isEmpty = (byte)((length == 1) ? 1 : 0);
-            unknown = 0;
-        }
-
-        public void Dispose()
-        {
-            if (notReallocated == 0)
-                Marshal.FreeHGlobal(stringPtr);
-        }
+    public void Dispose()
+    {
+        Marshal.FreeHGlobal(textPtr);
     }
 }
