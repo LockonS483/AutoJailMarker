@@ -50,10 +50,11 @@ internal class ConfigWindow : IDisposable
     {
         if (!Visible) return;
 
-        var minSize = new Vector2(282, 310);
+        var minSize = new Vector2(282, 280);
+        var initSize = new Vector2(282, 430);
         var partySize = Service.PartyList.Length;
 
-        ImGui.SetNextWindowSize(minSize, ImGuiCond.FirstUseEver);
+        ImGui.SetNextWindowSize(initSize, ImGuiCond.FirstUseEver);
         ImGui.SetNextWindowSizeConstraints(minSize, new Vector2(float.MaxValue, float.MaxValue));
         if (ImGui.Begin("Auto Jail Marker - Settings", ref Visible))
         {
