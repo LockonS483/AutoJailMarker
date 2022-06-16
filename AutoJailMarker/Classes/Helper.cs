@@ -1,6 +1,5 @@
 ﻿using Dalamud.Game.ClientState.Objects.SubKinds;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
-using PartyMember = Dalamud.Game.ClientState.Party.PartyMember;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -20,11 +19,6 @@ public static unsafe class Helper
     public const string NotInPrioMessage = "Not in priority list - using party list as priority";
 
     public static bool PlayerExists => Service.ClientState?.LocalPlayer != null;
-
-    public static PartyMember GetPCharFromId(uint id)
-    {
-        return Service.PartyList.FirstOrDefault(p => p.ObjectId == id);
-    }
 
     public static bool IsIdInParty(ulong id)
     {
