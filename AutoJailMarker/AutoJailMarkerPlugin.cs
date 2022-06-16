@@ -147,7 +147,7 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
         ChatManager.PrintEcho("---Begin Matching Targets---", echo);
         for (var i = 0; i < partyPrioList.Count; i++)
         {
-            if (!PluginConfig.Prio.Contains(partyPrioList[i].Name) && !notInPrio)
+            if (!PluginConfig.Prio.Any(n => partyPrioList[i].Name.ToLower().StartsWith(n.ToLower())) && !notInPrio)
             {
                 ChatManager.PrintError(Helper.NotInPrioMessage);
                 notInPrio = true;
@@ -192,8 +192,11 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
             var player = Helper.GetPlayerByObjectId(objectId);
             if (player == null) continue;
 
+            var world = player.HomeWorld.GameData;
+            var worldName = world != null ? "@" + world.Name.RawString : "";
+
             OrderedPartyList.Add(player);
-            ChatManager.PrintEcho(player.Name.TextValue, echo);
+            ChatManager.PrintEcho(player.Name.TextValue + worldName, echo);
         }
     }
 
@@ -229,8 +232,28 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
         {
             foreach (var prio in PluginConfig.Prio)
             {
-                var partyIndexes = OrderedPartyList.Where(p => p.Name.TextValue.Contains(prio))
-                    .Select(p => new PartyIndex(p.Name.TextValue, OrderedPartyList.IndexOf(p) + 1));
+                var prioName = prio;
+                var world = string.Empty;
+
+                if (prioName.Contains('@'))
+                {
+                    var splitName = prioName.Split('@');
+                    prioName = splitName[0];
+                    world = splitName[1];
+                }
+
+                var partyIndexes = OrderedPartyList.Where(p =>
+                    p.Name.TextValue.ToLower().Contains(prioName.ToLower()) &&
+                    (world == string.Empty || p.HomeWorld.GameData?.Name.RawString.ToLower() == world.ToLower())
+                ).Select(p =>
+                    new PartyIndex(
+                        p.Name.TextValue + (p.HomeWorld.GameData != null
+                            ? "@" + p.HomeWorld.GameData.Name.RawString
+                            : ""),
+                        p.ObjectId,
+                        OrderedPartyList.IndexOf(p) + 1
+                    )
+                );
 
                 var partyIndex = partyIndexes.Where(partyIndex => !partyPrioList.Contains(partyIndex)).ToList();
                 if (partyIndex.Count <= 0) continue;
