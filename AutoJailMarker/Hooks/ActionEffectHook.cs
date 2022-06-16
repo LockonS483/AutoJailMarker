@@ -17,7 +17,7 @@ internal unsafe class ActionEffectHook : IDisposable
 
     private static readonly uint[] SkillIds = { 645, 1652, 11115, 11116 };
 
-    public List<string> CollectionTargets = new();
+    public List<uint> CollectionTargets = new();
     public readonly Stopwatch ClearMarkers = new();
 
     public ActionEffectHook(AutoJailMarkerPlugin autoJailMarkerPlugin)
@@ -85,9 +85,7 @@ internal unsafe class ActionEffectHook : IDisposable
 
                     if (!ClearMarkers.IsRunning) ClearMarkers.Start();
 
-                    var pMember = Helper.GetPCharFromId((uint)l);
-                    var pMemberName = pMember.Name.ToString();
-                    CollectionTargets.Add(pMemberName);
+                    CollectionTargets.Add((uint)l);
 
                     if (CollectionTargets.Count == Helper.JailCount) break;
                 }

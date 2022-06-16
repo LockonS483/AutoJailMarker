@@ -7,11 +7,13 @@ namespace AutoJailMarker.Classes;
 public struct PartyIndex
 {
     public readonly string Name;
+    public readonly uint ObjectId;
     public readonly int Index;
 
-    public PartyIndex(string n, int i)
+    public PartyIndex(string n, uint ui, int i)
     {
         Name = n;
+        ObjectId = ui;
         Index = i;
     }
 }

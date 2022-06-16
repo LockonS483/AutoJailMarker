@@ -101,7 +101,7 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
 
         if (actionEffectHook.ClearMarkers.ElapsedMilliseconds < Helper.CollectionTimeout) return;
 
-        actionEffectHook.CollectionTargets = new List<string>();
+        actionEffectHook.CollectionTargets = new List<uint>();
         if (Helper.IsMarking) ClearMarkers(PluginConfig.Debug);
         actionEffectHook.ClearMarkers.Stop();
         actionEffectHook.ClearMarkers.Reset();
@@ -154,7 +154,7 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
             }
 
             ChatManager.PrintEcho($">start match for {partyPrioList[i].Name}", echo);
-            if (actionEffectHook.CollectionTargets.Contains(partyPrioList[i].Name))
+            if (actionEffectHook.CollectionTargets.Contains(partyPrioList[i].ObjectId))
             {
                 ChatManager.PrintEcho(
                     Helper.MarkPrefix[playersMarked] + string.Format(Helper.MarkMessage, partyPrioList[i].Name, i + 1),
@@ -207,7 +207,14 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
             foreach (var classEnum in PluginConfig.PrioJobs)
             {
                 foreach (var partyIndex in OrderedPartyList.Where(p => p.ClassJob.GameData?.JobIndex == (uint)classEnum)
-                             .Select(p => new PartyIndex(p.Name.TextValue, OrderedPartyList.IndexOf(p) + 1)))
+                             .Select(p =>
+                                 new PartyIndex(
+                                     p.Name.TextValue + (p.HomeWorld.GameData != null
+                                         ? "@" + p.HomeWorld.GameData.Name.RawString
+                                         : ""),
+                                     p.ObjectId,
+                                     OrderedPartyList.IndexOf(p) + 1)
+                             ))
                 {
                     if (partyPrioList.Count == 8) break;
 
@@ -237,8 +244,15 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
 
             foreach (var partyIndex in from pChar in OrderedPartyList
                      where partyPrioList.All(pIndex => pIndex.Name != pChar.Name.TextValue)
-                     let name = pChar.Name.TextValue
-                     select new PartyIndex(name, OrderedPartyList.IndexOf(pChar) + 1))
+                     select
+                         new PartyIndex(
+                             pChar.Name.TextValue + (pChar.HomeWorld.GameData != null
+                                 ? "@" + pChar.HomeWorld.GameData.Name.RawString
+                                 : ""),
+                             pChar.ObjectId,
+                             OrderedPartyList.IndexOf(pChar) + 1
+                             )
+                     )
             {
                 partyPrioList.Add(partyIndex);
                 ChatManager.PrintEcho(string.Format(message, partyIndex.Name, partyIndex.Index), echo);
