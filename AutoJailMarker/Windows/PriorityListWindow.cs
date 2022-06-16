@@ -78,7 +78,7 @@ internal class PriorityListWindow : IDisposable
         if (ImGui.BeginTable("PrioTable", 3, ImGuiTableFlags.PreciseWidths))
         {
             var indexColumnSize = useJobPrio ? 23 : 16;
-            var inputColumnSize = useJobPrio ? 91 : 180;
+            var inputColumnSize = useJobPrio ? 91 : 185;
             var buttonColumnSize = useJobPrio ? 46 : 72;
 
             ImGui.TableSetupColumn(string.Empty, ImGuiTableColumnFlags.WidthFixed, indexColumnSize);
@@ -86,6 +86,9 @@ internal class PriorityListWindow : IDisposable
             ImGui.TableSetupColumn(string.Empty, ImGuiTableColumnFlags.WidthFixed, buttonColumnSize);
 
             var fieldCount = useJobPrio ? 19 : 8;
+
+            var duplicates = config.Prio.GroupBy(n => n.ToLower()).Where(g => g.Key != "" && g.Count() > 1)
+                .Select(g => g.Key).ToList();
 
             for (var i = 0; i < fieldCount; i++)
             {
@@ -114,8 +117,19 @@ internal class PriorityListWindow : IDisposable
                 }
                 else
                 {
-                    if (ImGui.InputTextWithHint("##prioInput", "Firstname Lastname", ref config.Prio[i], 30))
+                    var duplicate = duplicates.Contains(config.Prio[i].ToLower());
+
+                    if (duplicate) ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DPSRed);
+
+                    if (ImGui.InputTextWithHint("##prioInput", "Firstname Lastname[@Server]", ref config.Prio[i], 30))
                         config.Save();
+
+                    if (duplicate)
+                    {
+                        ImGui.PopStyleColor();
+                        SetHoverTooltip(
+                            "Duplicate character.\nIf you have two characters with the same name in your group,\nplease add the server for both so that the plugin works properly.\ne.g. Firstname Lastname@Server");
+                    }
                 }
 
                 ImGui.TableNextColumn();
