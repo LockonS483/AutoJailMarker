@@ -189,9 +189,8 @@ internal class ConfigWindow : IDisposable
 
                 for (var i = 0; i < partyPrioList.Count; i++)
                 {
-                    if (marked.All(pChar => !pChar.Name.TextValue.Contains(partyPrioList[i].Name))) continue;
-
-                    if (!config.Prio.Contains(partyPrioList[i].Name) && !notInPrio)
+                    if (!config.UseJobPrio &&
+                        !config.Prio.Any(n => partyPrioList[i].Name.ToLower().StartsWith(n.ToLower())) && !notInPrio)
                     {
                         ChatManager.PrintError(Helper.NotInPrioMessage);
                         notInPrio = true;

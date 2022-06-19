@@ -147,7 +147,8 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
         ChatManager.PrintEcho("---Begin Matching Targets---", echo);
         for (var i = 0; i < partyPrioList.Count; i++)
         {
-            if (!PluginConfig.Prio.Any(n => partyPrioList[i].Name.ToLower().StartsWith(n.ToLower())) && !notInPrio)
+            if (!PluginConfig.UseJobPrio &&
+                !PluginConfig.Prio.Any(n => partyPrioList[i].Name.ToLower().StartsWith(n.ToLower())) && !notInPrio)
             {
                 ChatManager.PrintError(Helper.NotInPrioMessage);
                 notInPrio = true;
