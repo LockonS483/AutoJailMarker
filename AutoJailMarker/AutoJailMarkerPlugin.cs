@@ -275,9 +275,11 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
                                  : ""),
                              pChar.ObjectId,
                              OrderedPartyList.IndexOf(pChar) + 1
-                             )
-                     )
+                         )
+                    )
             {
+                if (partyPrioList.Contains(partyIndex)) continue;
+
                 partyPrioList.Add(partyIndex);
                 ChatManager.PrintEcho(string.Format(message, partyIndex.Name, partyIndex.Index), echo);
             }
