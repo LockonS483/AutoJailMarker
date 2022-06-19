@@ -264,7 +264,7 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
                     PluginConfig.Debug);
             }
 
-            if (partyPrioList.Count == 8) return partyPrioList;
+            if (partyPrioList.Count == Service.PartyList.Length) return partyPrioList;
 
             foreach (var partyIndex in from pChar in OrderedPartyList
                      where partyPrioList.All(pIndex => pIndex.Name != pChar.Name.TextValue)
