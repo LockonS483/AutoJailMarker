@@ -1,14 +1,15 @@
-﻿using Dalamud.Hooking;
+﻿using AutoJailMarker.Classes;
+using Dalamud.Hooking;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using AutoJailMarker.Classes;
 
 namespace AutoJailMarker.Hooks;
 
-public unsafe class ActionEffectHook : IDisposable
+internal unsafe class ActionEffectHook : IDisposable
 {
+    private readonly AutoJailMarkerPlugin autoJailMarkerPlugin;
     private readonly Hook<ReceiveActionEffectDelegate> receiveActionEffectHook;
 
     private delegate void ReceiveActionEffectDelegate(int sourceId, IntPtr sourceCharacter, IntPtr pos,
@@ -16,11 +17,13 @@ public unsafe class ActionEffectHook : IDisposable
 
     private static readonly uint[] SkillIds = { 645, 1652, 11115, 11116 };
 
-    public List<string> CollectionTargets = new();
+    public List<uint> CollectionTargets = new();
     public readonly Stopwatch ClearMarkers = new();
 
-    public ActionEffectHook()
+    public ActionEffectHook(AutoJailMarkerPlugin autoJailMarkerPlugin)
     {
+        this.autoJailMarkerPlugin = autoJailMarkerPlugin;
+
         var receiveAEtPtr = Service.SigScanner.ScanText("4C 89 44 24 ?? 55 56 57 41 54 41 55 41 56 48 8D 6C 24");
         receiveActionEffectHook = new Hook<ReceiveActionEffectDelegate>(receiveAEtPtr, ReceiveActionEffect);
         receiveActionEffectHook.Enable();
@@ -35,7 +38,7 @@ public unsafe class ActionEffectHook : IDisposable
     private void ReceiveActionEffect(int sourceId, IntPtr sourceCharacter, IntPtr pos, IntPtr effectHeader,
         IntPtr effectArray, IntPtr effectTrail)
     {
-        if (!Helper.PlayerExists)
+        if (!Helper.PlayerExists || !autoJailMarkerPlugin.PluginConfig.Enabled)
         {
             receiveActionEffectHook.Original(sourceId, sourceCharacter, pos, effectHeader, effectArray,
                 effectTrail);
@@ -82,9 +85,7 @@ public unsafe class ActionEffectHook : IDisposable
 
                     if (!ClearMarkers.IsRunning) ClearMarkers.Start();
 
-                    var pMember = Helper.GetPCharFromId((uint)l);
-                    var pMemberName = pMember.Name.ToString();
-                    CollectionTargets.Add(pMemberName);
+                    CollectionTargets.Add((uint)l);
 
                     if (CollectionTargets.Count == Helper.JailCount) break;
                 }

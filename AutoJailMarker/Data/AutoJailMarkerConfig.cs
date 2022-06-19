@@ -1,5 +1,6 @@
-﻿using System;
+﻿using AutoJailMarker.Classes;
 using Dalamud.Configuration;
+using System;
 
 namespace AutoJailMarker.Data;
 
@@ -8,9 +9,18 @@ public class AutoJailMarkerConfig : IPluginConfiguration
 {
     public int Version { get; set; } = 0;
 
+    public bool Enabled = true;
+    public bool UseJobPrio = false;
+    public bool Debug = false;
+
     public string[] Prio = { "", "", "", "", "", "", "", "" };
 
-    public bool FullEcho = true;
+    public ClassEnum[] PrioJobs =
+    {
+        ClassEnum.MNK, ClassEnum.DRG, ClassEnum.NIN, ClassEnum.SAM, ClassEnum.RPR, ClassEnum.PLD, ClassEnum.WAR,
+        ClassEnum.DRK, ClassEnum.GNB, ClassEnum.BRD, ClassEnum.MCH, ClassEnum.DNC, ClassEnum.SMN, ClassEnum.RDM,
+        ClassEnum.BLM, ClassEnum.WHM, ClassEnum.SCH, ClassEnum.AST, ClassEnum.SGE
+    };
 
     public void Save()
     {
@@ -20,11 +30,12 @@ public class AutoJailMarkerConfig : IPluginConfiguration
     /// <summary>
     /// Swaps two entries in Prio
     /// </summary>
+    /// <param name="array">Array that is to be changed</param>
     /// <param name="i">Current index in Prio</param>
     /// <param name="iNew">New index in Prio</param>
-    public void MovePrio(int i, int iNew)
+    public void MovePrio<T>(T[] array, int i, int iNew)
     {
-        (Prio[i], Prio[iNew]) = (Prio[iNew], Prio[i]);
+        (array[i], array[iNew]) = (array[iNew], array[i]);
         Save();
     }
 }
