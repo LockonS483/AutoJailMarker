@@ -185,17 +185,20 @@ internal class ConfigWindow : IDisposable
                 var randomized = Enumerable.Range(0, partySize).ToList();
                 randomized = randomized.OrderBy(_ => rnd.Next()).ToList().GetRange(0, 3);
 
-                var marked = autoJailMarkerPlugin.OrderedPartyList.Where((_, i) => randomized.Contains(i)).ToList();
+                var marked = autoJailMarkerPlugin.OrderedPartyList.Where((_, i) => randomized.Contains(i))
+                    .Select(pChar => pChar.ObjectId).ToList();
 
                 for (var i = 0; i < partyPrioList.Count; i++)
                 {
-                    if (marked.All(pChar => !pChar.Name.TextValue.Contains(partyPrioList[i].Name))) continue;
-
-                    if (!config.Prio.Contains(partyPrioList[i].Name) && !notInPrio)
+                    if (!config.UseJobPrio &&
+                        !config.Prio.Any(n => n != "" && partyPrioList[i].Name.ToLower().StartsWith(n.ToLower())) &&
+                        !notInPrio)
                     {
                         ChatManager.PrintError(Helper.NotInPrioMessage);
                         notInPrio = true;
                     }
+
+                    if (!marked.Contains(partyPrioList[i].ObjectId)) continue;
 
                     ChatManager.PrintEcho(Helper.MarkPrefix[playersMarked] +
                                           string.Format(Helper.MarkMessage, partyPrioList[i].Name, i + 1));

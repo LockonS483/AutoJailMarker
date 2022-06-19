@@ -147,7 +147,9 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
         ChatManager.PrintEcho("---Begin Matching Targets---", echo);
         for (var i = 0; i < partyPrioList.Count; i++)
         {
-            if (!PluginConfig.Prio.Any(n => partyPrioList[i].Name.ToLower().StartsWith(n.ToLower())) && !notInPrio)
+            if (!PluginConfig.UseJobPrio &&
+                !PluginConfig.Prio.Any(n => n != "" && partyPrioList[i].Name.ToLower().StartsWith(n.ToLower())) &&
+                !notInPrio)
             {
                 ChatManager.PrintError(Helper.NotInPrioMessage);
                 notInPrio = true;
@@ -263,7 +265,7 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
                     PluginConfig.Debug);
             }
 
-            if (partyPrioList.Count == 8) return partyPrioList;
+            if (partyPrioList.Count == Service.PartyList.Length) return partyPrioList;
 
             foreach (var partyIndex in from pChar in OrderedPartyList
                      where partyPrioList.All(pIndex => pIndex.Name != pChar.Name.TextValue)
@@ -274,9 +276,11 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
                                  : ""),
                              pChar.ObjectId,
                              OrderedPartyList.IndexOf(pChar) + 1
-                             )
-                     )
+                         )
+                    )
             {
+                if (partyPrioList.Contains(partyIndex)) continue;
+
                 partyPrioList.Add(partyIndex);
                 ChatManager.PrintEcho(string.Format(message, partyIndex.Name, partyIndex.Index), echo);
             }
