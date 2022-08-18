@@ -12,7 +12,7 @@ See at https://github.com/goatcorp/FFXIVQuickLauncher.
 * Auto Jail Marker should appear in the available plugins list.
 
 ### Use
-* use /jailmarker and fill in the priority list.
+* use /jmsettings to change settings and priority list\
 
 ## Discord
 * If you have any questions or suggestions you can join the discord at https://discord.gg/4ejWrvgPum
