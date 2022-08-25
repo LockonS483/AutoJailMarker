@@ -20,7 +20,7 @@ internal class ConfigWindow : IDisposable
     private readonly TextureWrap titanImage;
     private readonly AutoJailMarkerPlugin autoJailMarkerPlugin;
 
-    public bool Visible = true;
+    public bool Visible = false;
     private bool headerOpened;
 
     public ConfigWindow(AutoJailMarkerConfig config, TextureWrap titanImage, AutoJailMarkerPlugin autoJailMarkerPlugin)
