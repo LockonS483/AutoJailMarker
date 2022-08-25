@@ -10,7 +10,7 @@ namespace AutoJailMarker.Hooks;
 
 internal unsafe class ActionEffectHook : IDisposable
 {
-    [Signature("4C 89 44 24 ?? 55 56 57 41 54 41 55 41 56 48 8D 6C 24")]
+    [Signature("4C 89 44 24 ?? 55 56 41 54 41 55 41 56")]
     private readonly IntPtr receiveAEtPtr = new();
     
     private readonly AutoJailMarkerPlugin autoJailMarkerPlugin;

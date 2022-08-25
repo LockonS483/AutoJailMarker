@@ -10,6 +10,7 @@ using Lumina.Excel.GeneratedSheets;
 using System;
 using System.Linq;
 using System.Numerics;
+using Dalamud.Logging;
 
 namespace AutoJailMarker.Windows;
 
@@ -19,7 +20,7 @@ internal class ConfigWindow : IDisposable
     private readonly TextureWrap titanImage;
     private readonly AutoJailMarkerPlugin autoJailMarkerPlugin;
 
-    public bool Visible;
+    public bool Visible = true;
     private bool headerOpened;
 
     public ConfigWindow(AutoJailMarkerConfig config, TextureWrap titanImage, AutoJailMarkerPlugin autoJailMarkerPlugin)
@@ -155,11 +156,17 @@ internal class ConfigWindow : IDisposable
     {
         if (ImGui.Button("Try Marks"))
         {
+            var currentMark = 1;
             partySize = partySize > 3 ? 3 : partySize == 0 ? 1 : partySize;
 
             for (var i = 1; i <= partySize; i++)
-                if (i == 1 || (partySize > 1 && Service.PartyList[i - 1]?.ObjectId != 0))
-                    Service.ChatManager.SendCommand($"/mk attack{i} <{i}>");
+            {
+                if (partySize <= 1 || Service.PartyList[i - 1]?.ObjectId == 0) continue;
+                
+                PluginLog.Debug($"/mk attack{i} <{currentMark}>");
+                Service.ChatManager.SendCommand($"/mk attack{i} <{currentMark}>");
+                currentMark++;
+            }
         }
 
         SetHoverTooltip("Try to see if the plugin can set marks in general");
