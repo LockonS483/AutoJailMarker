@@ -10,10 +10,6 @@
         <Version>3.2.1.0</Version>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-        <OutputPath>$(appdata)\XIVLauncher\devPlugins\AutoJailMarker\</OutputPath>
-    </PropertyGroup>
-
     <PropertyGroup Condition="'$(Configuration)' == 'Release'">
         <GenerateDependencyFile>false</GenerateDependencyFile>
         <DebugType>None</DebugType>
