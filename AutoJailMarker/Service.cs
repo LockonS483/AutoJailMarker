@@ -20,7 +20,6 @@ internal class Service
     [PluginService] public static DataManager DataManager { get; private set; } = null!;
     [PluginService] public static Framework Framework { get; private set; } = null!;
     [PluginService] public static PartyList PartyList { get; private set; } = null!;
-    [PluginService] public static SigScanner SigScanner { get; private set; } = null!;
     [PluginService] public static TargetManager TargetManager { get; private set; } = null!;
     [PluginService] public static ObjectTable ObjectTable { get; private set; } = null!;
 

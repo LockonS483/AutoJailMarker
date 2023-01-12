@@ -36,8 +36,6 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
 
         ChatManager.PrintEcho("-Initializing Plugin-", PluginConfig.Debug);
 
-        if (!FFXIVClientStructs.Resolver.Initialized) FFXIVClientStructs.Resolver.Initialize();
-
         // load titan image from embedded resources
         var assembly = Assembly.GetExecutingAssembly();
         const string resourceName = "AutoJailMarker.Data.Titan.png";
@@ -77,6 +75,7 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
         if (jobClassSheet != null)
             Helper.Classes = jobClassSheet.ToArray().Where(row => Enum.IsDefined(typeof(ClassEnum), row.JobIndex))
                 .ToDictionary<ClassJob, int, string>(row => row.JobIndex, row => row.Abbreviation);
+        ChatManager.PrintEcho(Service.PartyList.Length.ToString());
     }
 
     public void Dispose()

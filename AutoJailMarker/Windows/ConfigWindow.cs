@@ -178,7 +178,7 @@ internal class ConfigWindow : IDisposable
     /// <param name="partySize">Size of the current party</param>
     private void DrawCheckPrioButton(int partySize)
     {
-        if (partySize > 2)
+        if (partySize >= Helper.JailCount)
         {
             if (ImGui.Button("Check Priority"))
             {
@@ -190,7 +190,7 @@ internal class ConfigWindow : IDisposable
                 var rnd = new Random();
 
                 var randomized = Enumerable.Range(0, partySize).ToList();
-                randomized = randomized.OrderBy(_ => rnd.Next()).ToList().GetRange(0, 3);
+                randomized = randomized.OrderBy(_ => rnd.Next()).ToList().GetRange(0, Helper.JailCount);
 
                 var marked = autoJailMarkerPlugin.OrderedPartyList.Where((_, i) => randomized.Contains(i))
                     .Select(pChar => pChar.ObjectId).ToList();
