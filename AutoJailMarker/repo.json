@@ -10,7 +10,7 @@
             "uwu"
         ],
         "InternalName": "AutoJailMarker",
-        "AssemblyVersion": "3.2.1.0",
+        "AssemblyVersion": "3.2.2.1",
         "RepoUrl": "https://github.com/LockonS483/AutoJailMarker",
         "ApplicableVersion": "any",
         "DalamudApiLevel": 8,
@@ -21,8 +21,8 @@
         "IsTestingExclusive": "False",
         "LastUpdated": 1661443794,
         "DownloadCount": 0,
-        "DownloadLinkInstall": "https://github.com/LockonS483/AutoJailMarker/releases/download/3.2.1.0/AutoJailMarker.zip",
-        "DownloadLinkTesting": "https://github.com/LockonS483/AutoJailMarker/releases/download/3.2.1.0/AutoJailMarker.zip",
-        "DownloadLinkUpdate": "https://github.com/LockonS483/AutoJailMarker/releases/download/3.2.1.0/AutoJailMarker.zip"
+        "DownloadLinkInstall": "https://github.com/LockonS483/AutoJailMarker/releases/download/3.2.2.1/AutoJailMarker.zip",
+        "DownloadLinkTesting": "https://github.com/LockonS483/AutoJailMarker/releases/download/3.2.2.1/AutoJailMarker.zip",
+        "DownloadLinkUpdate": "https://github.com/LockonS483/AutoJailMarker/releases/download/3.2.2.1/AutoJailMarker.zip"
     }
 ]

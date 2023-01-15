@@ -75,7 +75,6 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
         if (jobClassSheet != null)
             Helper.Classes = jobClassSheet.ToArray().Where(row => Enum.IsDefined(typeof(ClassEnum), row.JobIndex))
                 .ToDictionary<ClassJob, int, string>(row => row.JobIndex, row => row.Abbreviation);
-        ChatManager.PrintEcho(Service.PartyList.Length.ToString());
     }
 
     public void Dispose()
