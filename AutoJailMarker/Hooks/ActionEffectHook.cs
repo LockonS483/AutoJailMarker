@@ -28,9 +28,9 @@ internal unsafe class ActionEffectHook : IDisposable
     {
         this.autoJailMarkerPlugin = autoJailMarkerPlugin;
 
-        SignatureHelper.Initialise(this);
+        Service.Hooks.InitializeFromAttributes(this);
 
-        receiveActionEffectHook = Hook<ReceiveActionEffectDelegate>.FromAddress(receiveAEtPtr, ReceiveActionEffect);
+        receiveActionEffectHook = Service.Hooks.HookFromAddress<ReceiveActionEffectDelegate>(receiveAEtPtr, ReceiveActionEffect);
         receiveActionEffectHook.Enable();
     }
 

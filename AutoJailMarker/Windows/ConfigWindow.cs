@@ -1,9 +1,11 @@
 ﻿using AutoJailMarker.Classes;
 using AutoJailMarker.Data;
 using AutoJailMarker.Managers;
-using Dalamud.Interface;
+using Dalamud.Plugin.Services;
+using Dalamud.Interface.Utility;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
+using Dalamud.Interface.Internal;
 using ImGuiNET;
 using ImGuiScene;
 using Lumina.Excel.GeneratedSheets;
@@ -17,13 +19,13 @@ namespace AutoJailMarker.Windows;
 internal class ConfigWindow : IDisposable
 {
     private readonly AutoJailMarkerConfig config;
-    private readonly TextureWrap titanImage;
+    private readonly IDalamudTextureWrap titanImage;
     private readonly AutoJailMarkerPlugin autoJailMarkerPlugin;
 
     public bool Visible = false;
     private bool headerOpened;
 
-    public ConfigWindow(AutoJailMarkerConfig config, TextureWrap titanImage, AutoJailMarkerPlugin autoJailMarkerPlugin)
+    public ConfigWindow(AutoJailMarkerConfig config, IDalamudTextureWrap titanImage, AutoJailMarkerPlugin autoJailMarkerPlugin)
     {
         this.config = config;
         this.titanImage = titanImage;

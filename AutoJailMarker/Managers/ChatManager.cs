@@ -1,5 +1,6 @@
 ﻿using AutoJailMarker.Classes;
 using Dalamud.Game;
+using Dalamud.Plugin.Services;
 using Dalamud.Utility.Signatures;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using System;
@@ -19,7 +20,7 @@ public class ChatManager : IDisposable
 
     public ChatManager()
     {
-        SignatureHelper.Initialise(this);
+        Service.Hooks.InitializeFromAttributes(this);
         Service.Framework.Update += FrameworkUpdate;
     }
 
@@ -30,7 +31,7 @@ public class ChatManager : IDisposable
         GC.SuppressFinalize(this);
     }
 
-    private void FrameworkUpdate(Framework framework)
+    private void FrameworkUpdate(IFramework framework)
     {
         if (chatBoxMessages.Reader.TryRead(out var message)) ExecuteCommand(message);
     }

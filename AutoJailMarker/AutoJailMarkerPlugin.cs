@@ -7,6 +7,7 @@ using Dalamud.Game;
 using Dalamud.Game.Command;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Plugin;
+using Dalamud.Plugin.Services;
 using Lumina.Excel.GeneratedSheets;
 using System;
 using System.Collections.Generic;
@@ -89,7 +90,7 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
         Service.PluginInterface.UiBuilder.OpenConfigUi -= DrawConfigUi;
     }
 
-    private void FrameworkUpdate(Framework framework)
+    private void FrameworkUpdate(IFramework framework)
     {
         if (!Helper.IsMarking && actionEffectHook.CollectionTargets.Count >= Helper.JailCount)
         {

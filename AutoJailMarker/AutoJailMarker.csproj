@@ -7,7 +7,7 @@
         <Platforms>x64</Platforms>
         <LangVersion>latest</LangVersion>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <Version>3.2.3.0</Version>
+        <Version>3.2.4.0</Version>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)' == 'Release'">
@@ -20,7 +20,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="DalamudPackager" Version="2.1.11" />
+        <PackageReference Include="DalamudPackager" Version="2.1.12" />
         <Reference Include="Dalamud">
             <HintPath>$(DalamudLibPath)\Dalamud.dll</HintPath>
             <Private>false</Private>
