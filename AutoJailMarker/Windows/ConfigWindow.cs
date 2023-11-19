@@ -165,7 +165,7 @@ internal class ConfigWindow : IDisposable
             {
                 if (partySize <= 1 || Service.PartyList[i - 1]?.ObjectId == 0) continue;
                 
-                PluginLog.Debug($"/mk attack{i} <{currentMark}>");
+                Service.PluginLog.Debug($"/mk attack{i} <{currentMark}>");
                 Service.ChatManager.SendCommand($"/mk attack{i} <{currentMark}>");
                 currentMark++;
             }
