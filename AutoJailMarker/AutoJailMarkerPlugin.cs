@@ -3,7 +3,6 @@ using AutoJailMarker.Data;
 using AutoJailMarker.Hooks;
 using AutoJailMarker.Managers;
 using AutoJailMarker.Windows;
-using Dalamud.Game;
 using Dalamud.Game.Command;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Plugin;
@@ -17,9 +16,10 @@ using System.Reflection;
 
 namespace AutoJailMarker;
 
+// ReSharper disable once ClassNeverInstantiated.Global
 internal class AutoJailMarkerPlugin : IDalamudPlugin
 {
-    public string Name => "Auto Jail Marker";
+    private static string Name => "Auto Jail Marker";
     public List<PlayerCharacter> OrderedPartyList;
     private List<int> markedIndexes = new();
 

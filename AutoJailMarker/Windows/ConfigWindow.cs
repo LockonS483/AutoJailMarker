@@ -1,18 +1,15 @@
 ﻿using AutoJailMarker.Classes;
 using AutoJailMarker.Data;
 using AutoJailMarker.Managers;
-using Dalamud.Plugin.Services;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
 using Dalamud.Interface.Internal;
 using ImGuiNET;
-using ImGuiScene;
 using Lumina.Excel.GeneratedSheets;
 using System;
 using System.Linq;
 using System.Numerics;
-using Dalamud.Logging;
 
 namespace AutoJailMarker.Windows;
 
@@ -22,7 +19,7 @@ internal class ConfigWindow : IDisposable
     private readonly IDalamudTextureWrap titanImage;
     private readonly AutoJailMarkerPlugin autoJailMarkerPlugin;
 
-    public bool Visible = false;
+    public bool Visible;
     private bool headerOpened;
 
     public ConfigWindow(AutoJailMarkerConfig config, IDalamudTextureWrap titanImage, AutoJailMarkerPlugin autoJailMarkerPlugin)
