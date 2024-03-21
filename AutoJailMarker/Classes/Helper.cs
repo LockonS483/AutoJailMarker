@@ -14,7 +14,7 @@ public static unsafe class Helper
     public static Dictionary<int, string> Classes { get; set; } = new();
     public static bool IsMarking { get; set; }
 
-    public static readonly string[] MarkPrefix = { "First", "Second", "Third" };
+    public static readonly string[] MarkPrefix = ["First", "Second", "Third"];
     public const string MarkMessage = " mark: {0} - Party list position: {1}";
     public const string NotInPrioMessage = "Not in priority list - using party list as priority";
 

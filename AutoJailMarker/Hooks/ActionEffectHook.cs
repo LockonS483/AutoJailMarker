@@ -19,9 +19,9 @@ internal unsafe class ActionEffectHook : IDisposable
     private delegate void ReceiveActionEffectDelegate(int sourceId, IntPtr sourceCharacter, IntPtr pos,
         IntPtr effectHeader, IntPtr effectArray, IntPtr effectTrail);
 
-    private static readonly uint[] SkillIds = { 645, 1652, 11115, 11116 };
+    private static readonly uint[] SkillIds = [645, 1652, 11115, 11116];
 
-    public List<uint> CollectionTargets = new();
+    public List<uint> CollectionTargets = [];
     public readonly Stopwatch ClearMarkers = new();
 
     public ActionEffectHook(AutoJailMarkerPlugin autoJailMarkerPlugin)

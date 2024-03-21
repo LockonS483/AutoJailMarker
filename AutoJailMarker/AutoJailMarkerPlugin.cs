@@ -21,7 +21,7 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
 {
     private static string Name => "Auto Jail Marker";
     public List<PlayerCharacter> OrderedPartyList;
-    private List<int> markedIndexes = new();
+    private List<int> markedIndexes = [];
 
     public AutoJailMarkerConfig PluginConfig { get; }
     private readonly ConfigWindow configWindow;
@@ -100,7 +100,7 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
 
         if (actionEffectHook.ClearMarkers.ElapsedMilliseconds < Helper.CollectionTimeout) return;
 
-        actionEffectHook.CollectionTargets = new List<uint>();
+        actionEffectHook.CollectionTargets = [];
         if (Helper.IsMarking) ClearMarkers(PluginConfig.Debug);
         actionEffectHook.ClearMarkers.Stop();
         actionEffectHook.ClearMarkers.Reset();
@@ -147,7 +147,7 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
         for (var i = 0; i < partyPrioList.Count; i++)
         {
             if (!PluginConfig.UseJobPrio &&
-                !PluginConfig.Prio.Any(n => n != "" && partyPrioList[i].Name.ToLower().StartsWith(n.ToLower())) &&
+                !PluginConfig.Prio.Any(n => n != "" && partyPrioList[i].Name.StartsWith(n, StringComparison.CurrentCultureIgnoreCase)) &&
                 !notInPrio)
             {
                 ChatManager.PrintError(Helper.NotInPrioMessage);
@@ -182,7 +182,7 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
 
     public void UpdateOrderedParty(bool echo = false)
     {
-        OrderedPartyList = new List<PlayerCharacter>();
+        OrderedPartyList = [];
 
         for (var i = 0; i < Service.PartyList.Length; i++)
         {
@@ -244,8 +244,8 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
                 }
 
                 var partyIndexes = OrderedPartyList.Where(p =>
-                    p.Name.TextValue.ToLower().Contains(prioName.ToLower()) &&
-                    (world == string.Empty || p.HomeWorld.GameData?.Name.RawString.ToLower() == world.ToLower())
+                    p.Name.TextValue.Contains(prioName, StringComparison.CurrentCultureIgnoreCase) &&
+                    (world == string.Empty || string.Equals(p.HomeWorld.GameData?.Name.RawString, world, StringComparison.CurrentCultureIgnoreCase))
                 ).Select(p =>
                     new PartyIndex(
                         p.Name.TextValue + (p.HomeWorld.GameData != null
@@ -293,7 +293,7 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
         ChatManager.PrintEcho("---Clearing Marks---", echo);
         foreach (var i in markedIndexes) Service.ChatManager.SendCommand($"/mk clear <{i}>");
 
-        markedIndexes = new List<int>();
+        markedIndexes = [];
         Helper.IsMarking = false;
     }
 }

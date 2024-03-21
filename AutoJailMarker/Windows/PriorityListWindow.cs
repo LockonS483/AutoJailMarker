@@ -13,19 +13,10 @@ using System.Threading.Tasks;
 
 namespace AutoJailMarker.Windows;
 
-internal class PriorityListWindow : IDisposable
+internal class PriorityListWindow(AutoJailMarkerConfig config, AutoJailMarkerPlugin autoJailMarkerPlugin) : IDisposable
 {
-    private readonly AutoJailMarkerConfig config;
-    private readonly AutoJailMarkerPlugin autoJailMarkerPlugin;
-
     public bool Visible;
     private string inlineError = string.Empty;
-
-    public PriorityListWindow(AutoJailMarkerConfig config, AutoJailMarkerPlugin autoJailMarkerPlugin)
-    {
-        this.config = config;
-        this.autoJailMarkerPlugin = autoJailMarkerPlugin;
-    }
 
     public void Dispose()
     {
@@ -88,8 +79,7 @@ internal class PriorityListWindow : IDisposable
 
             var fieldCount = useJobPrio ? 19 : 8;
 
-            var duplicates = config.Prio.GroupBy(n => n.ToLower()).Where(g => g.Key != "" && g.Count() > 1)
-                .Select(g => g.Key).ToList();
+            var duplicates = config.Prio.GroupBy(n => n.ToLower()).Where(g => g.Key != "" && g.Count() > 1).Select(g => g.Key).ToList();
 
             for (var i = 0; i < fieldCount; i++)
             {

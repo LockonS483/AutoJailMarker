@@ -13,21 +13,10 @@ using System.Numerics;
 
 namespace AutoJailMarker.Windows;
 
-internal class ConfigWindow : IDisposable
+internal class ConfigWindow(AutoJailMarkerConfig config, IDalamudTextureWrap titanImage, AutoJailMarkerPlugin autoJailMarkerPlugin) : IDisposable
 {
-    private readonly AutoJailMarkerConfig config;
-    private readonly IDalamudTextureWrap titanImage;
-    private readonly AutoJailMarkerPlugin autoJailMarkerPlugin;
-
     public bool Visible;
     private bool headerOpened;
-
-    public ConfigWindow(AutoJailMarkerConfig config, IDalamudTextureWrap titanImage, AutoJailMarkerPlugin autoJailMarkerPlugin)
-    {
-        this.config = config;
-        this.titanImage = titanImage;
-        this.autoJailMarkerPlugin = autoJailMarkerPlugin;
-    }
 
     public void Dispose()
     {
