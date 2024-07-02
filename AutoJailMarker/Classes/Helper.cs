@@ -11,6 +11,7 @@ public static unsafe class Helper
     public const string PriorityCommand = "/jmpriority";
     public const uint CollectionTimeout = 15000;
     public const int JailCount = 3;
+    public const int JobCount = 21;
     public static Dictionary<int, string> Classes { get; set; } = new();
     public static bool IsMarking { get; set; }
 
@@ -25,26 +26,21 @@ public static unsafe class Helper
         if (!PlayerExists) return false;
         // 777 = UwU, 296 = Titan
         return Service.ClientState.TerritoryType is 777 /*or 296*/ &&
-               Service.PartyList.Any(p => p.GameObject?.ObjectId == (uint)id);
+               Service.PartyList.Any(p => p.GameObject?.GameObjectId == (uint)id);
     }
 
-    public static int GetHudGroupMember(int index)
+    public static uint GetHudGroupMember(int index)
     {
-        var frameworkInstance = FFXIVClientStructs.FFXIV.Client.System.Framework.Framework.Instance();
-        var baseAddress = (byte*)frameworkInstance->GetUiModule()->GetAgentModule()->GetAgentByInternalId(AgentId.Hud);
-        const int groupDataOffset = 0xCC8;
-
-        var objectId = *(int*)(baseAddress + groupDataOffset + index * 0x20 + 0x18);
-
-        return objectId;
+        var agent = AgentHUD.Instance();
+        return agent->PartyMembers[index].EntityId;
     }
 
-    public static PlayerCharacter GetPlayerByObjectId(uint objectId)
+    public static IPlayerCharacter GetPlayerByObjectId(uint objectId)
     {
         var result = Service.ObjectTable.SearchById(objectId);
 
-        if (result?.GetType() == typeof(PlayerCharacter) && result as PlayerCharacter != null)
-            return result as PlayerCharacter;
+        if (result is IPlayerCharacter character)
+            return character;
 
         return null;
     }

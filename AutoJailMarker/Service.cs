@@ -8,7 +8,7 @@ namespace AutoJailMarker;
 
 internal class Service
 {
-    [PluginService] public static DalamudPluginInterface PluginInterface { get; private set; } = null!;
+    [PluginService] public static IDalamudPluginInterface PluginInterface { get; private set; } = null!;
     [PluginService] public static IChatGui ChatGui { get; private set; } = null!;
     [PluginService] public static IClientState ClientState { get; private set; } = null!;
     [PluginService] public static ICommandManager CommandManager { get; private set; } = null!;
@@ -19,6 +19,7 @@ internal class Service
     [PluginService] public static IObjectTable ObjectTable { get; private set; } = null!;
     [PluginService] public static IPluginLog PluginLog { get; private set; } = null!;
     [PluginService] public static IGameInteropProvider Hooks { get; private set; } = null;
+    [PluginService] public static ITextureProvider Textures { get; private set; } = null;
 
     public static ChatManager ChatManager { get; set; } = null!;
 }

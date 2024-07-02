@@ -4,17 +4,20 @@ using AutoJailMarker.Managers;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
-using Dalamud.Interface.Internal;
 using ImGuiNET;
 using Lumina.Excel.GeneratedSheets;
 using System;
 using System.Linq;
 using System.Numerics;
+using System.Reflection;
+using Dalamud.Interface.Textures.TextureWraps;
 
 namespace AutoJailMarker.Windows;
 
-internal class ConfigWindow(AutoJailMarkerConfig config, IDalamudTextureWrap titanImage, AutoJailMarkerPlugin autoJailMarkerPlugin) : IDisposable
+internal class ConfigWindow(AutoJailMarkerConfig config, AutoJailMarkerPlugin autoJailMarkerPlugin) : IDisposable
 {
+    private IDalamudTextureWrap titanImage;
+    
     public bool Visible;
     private bool headerOpened;
 
@@ -27,8 +30,15 @@ internal class ConfigWindow(AutoJailMarkerConfig config, IDalamudTextureWrap tit
     /// <summary>
     /// Main draw handler
     /// </summary>
-    public void Draw()
+    public async void Draw()
     {
+        if (titanImage == null)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            const string resourceName = "AutoJailMarker.Data.Titan.png";
+            titanImage = await Service.Textures.GetFromManifestResource(assembly, resourceName).RentAsync();
+        }
+        
         DrawSettingsWindow();
     }
 
@@ -181,12 +191,12 @@ internal class ConfigWindow(AutoJailMarkerConfig config, IDalamudTextureWrap tit
                 randomized = randomized.OrderBy(_ => rnd.Next()).ToList().GetRange(0, Helper.JailCount);
 
                 var marked = autoJailMarkerPlugin.OrderedPartyList.Where((_, i) => randomized.Contains(i))
-                    .Select(pChar => pChar.ObjectId).ToList();
+                    .Select(pChar => pChar.GameObjectId).ToList();
 
                 for (var i = 0; i < partyPrioList.Count; i++)
                 {
                     if (!config.UseJobPrio &&
-                        !config.Prio.Any(n => n != "" && partyPrioList[i].Name.ToLower().StartsWith(n.ToLower())) &&
+                        !config.Prio.Any(n => n != "" && partyPrioList[i].Name.StartsWith(n, StringComparison.CurrentCultureIgnoreCase)) &&
                         !notInPrio)
                     {
                         ChatManager.PrintError(Helper.NotInPrioMessage);

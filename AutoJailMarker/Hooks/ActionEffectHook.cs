@@ -10,7 +10,7 @@ namespace AutoJailMarker.Hooks;
 
 internal unsafe class ActionEffectHook : IDisposable
 {
-    [Signature("40 55 53 57 41 54 41 55 41 56 41 57 48 8D AC 24 ?? ?? ?? ?? 48 81 EC ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 33 C4 48 89 45 70")]
+    [Signature("40 55 56 57 41 54 41 55 41 56 48 8D AC 24 ?? ?? ?? ??")]
     private readonly IntPtr receiveAEtPtr = new();
     
     private readonly AutoJailMarkerPlugin autoJailMarkerPlugin;
@@ -21,7 +21,7 @@ internal unsafe class ActionEffectHook : IDisposable
 
     private static readonly uint[] SkillIds = [645, 1652, 11115, 11116];
 
-    public List<uint> CollectionTargets = [];
+    public List<ulong> CollectionTargets = [];
     public readonly Stopwatch ClearMarkers = new();
 
     public ActionEffectHook(AutoJailMarkerPlugin autoJailMarkerPlugin)

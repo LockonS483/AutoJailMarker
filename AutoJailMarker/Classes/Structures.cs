@@ -4,10 +4,10 @@ using System.Text;
 
 namespace AutoJailMarker.Classes;
 
-public struct PartyIndex(string name, uint objectId, int index)
+public struct PartyIndex(string name, ulong objectId, int index)
 {
     public readonly string Name = name;
-    public readonly uint ObjectId = objectId;
+    public readonly ulong ObjectId = objectId;
     public readonly int Index = index;
 }
 

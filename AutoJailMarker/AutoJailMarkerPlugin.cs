@@ -10,9 +10,7 @@ using Dalamud.Plugin.Services;
 using Lumina.Excel.GeneratedSheets;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 
 namespace AutoJailMarker;
 
@@ -20,7 +18,7 @@ namespace AutoJailMarker;
 internal class AutoJailMarkerPlugin : IDalamudPlugin
 {
     private static string Name => "Auto Jail Marker";
-    public List<PlayerCharacter> OrderedPartyList;
+    public List<IPlayerCharacter> OrderedPartyList;
     private List<int> markedIndexes = [];
 
     public AutoJailMarkerConfig PluginConfig { get; }
@@ -28,33 +26,25 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
     private readonly PriorityListWindow priorityListWindow;
     private readonly ActionEffectHook actionEffectHook;
 
-    public AutoJailMarkerPlugin(DalamudPluginInterface pluginInterface)
+    public AutoJailMarkerPlugin(IDalamudPluginInterface pluginInterface)
     {
         pluginInterface.Create<Service>();
         PluginConfig = pluginInterface.GetPluginConfig() as AutoJailMarkerConfig ?? new AutoJailMarkerConfig();
+            
+        // Add new classes to config
+        if (PluginConfig.PrioJobs.Length != Helper.JobCount)
+        {
+            var list = PluginConfig.PrioJobs.ToList();
+            list.AddRange(new AutoJailMarkerConfig().PrioJobs.Where(job => !PluginConfig.PrioJobs.Contains(job)));
+
+            PluginConfig.PrioJobs = list.ToArray();
+        }
 
         Service.ChatManager = new ChatManager();
 
         ChatManager.PrintEcho("-Initializing Plugin-", PluginConfig.Debug);
 
-        // load titan image from embedded resources
-        var assembly = Assembly.GetExecutingAssembly();
-        const string resourceName = "AutoJailMarker.Data.Titan.png";
-
-        var titanData = Array.Empty<byte>();
-        using (var stream = assembly.GetManifestResourceStream(resourceName))
-        {
-            if (stream != null)
-            {
-                using var ms = new MemoryStream();
-                stream.CopyTo(ms);
-                titanData = ms.ToArray();
-            }
-        }
-
-        var titanImage = titanData.Length != 0 ? Service.PluginInterface.UiBuilder.LoadImage(titanData) : null;
-
-        configWindow = new ConfigWindow(PluginConfig, titanImage, this);
+        configWindow = new ConfigWindow(PluginConfig, this);
         priorityListWindow = new PriorityListWindow(PluginConfig, this);
         actionEffectHook = new ActionEffectHook(this);
         Service.Framework.Update += FrameworkUpdate;
@@ -186,7 +176,7 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
 
         for (var i = 0; i < Service.PartyList.Length; i++)
         {
-            var objectId = (uint)Helper.GetHudGroupMember(i);
+            var objectId = Helper.GetHudGroupMember(i);
 
             if (objectId is 0 or 0xE000_0000) continue;
 
@@ -216,7 +206,7 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
                                      p.Name.TextValue + (p.HomeWorld.GameData != null
                                          ? "@" + p.HomeWorld.GameData.Name.RawString
                                          : ""),
-                                     p.ObjectId,
+                                     p.GameObjectId,
                                      OrderedPartyList.IndexOf(p) + 1)
                              ))
                 {
@@ -251,7 +241,7 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
                         p.Name.TextValue + (p.HomeWorld.GameData != null
                             ? "@" + p.HomeWorld.GameData.Name.RawString
                             : ""),
-                        p.ObjectId,
+                        p.GameObjectId,
                         OrderedPartyList.IndexOf(p) + 1
                     )
                 );
@@ -273,7 +263,7 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
                              pChar.Name.TextValue + (pChar.HomeWorld.GameData != null
                                  ? "@" + pChar.HomeWorld.GameData.Name.RawString
                                  : ""),
-                             pChar.ObjectId,
+                             pChar.GameObjectId,
                              OrderedPartyList.IndexOf(pChar) + 1
                          )
                     )

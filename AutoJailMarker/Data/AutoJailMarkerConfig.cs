@@ -13,14 +13,14 @@ public class AutoJailMarkerConfig : IPluginConfiguration
     public bool UseJobPrio = false;
     public bool Debug = false;
 
-    public string[] Prio = { "", "", "", "", "", "", "", "" };
+    public string[] Prio = ["", "", "", "", "", "", "", ""];
 
     public ClassEnum[] PrioJobs =
-    {
-        ClassEnum.MNK, ClassEnum.DRG, ClassEnum.NIN, ClassEnum.SAM, ClassEnum.RPR, ClassEnum.PLD, ClassEnum.WAR,
-        ClassEnum.DRK, ClassEnum.GNB, ClassEnum.BRD, ClassEnum.MCH, ClassEnum.DNC, ClassEnum.SMN, ClassEnum.RDM,
-        ClassEnum.BLM, ClassEnum.WHM, ClassEnum.SCH, ClassEnum.AST, ClassEnum.SGE
-    };
+    [
+        ClassEnum.MNK, ClassEnum.DRG, ClassEnum.NIN, ClassEnum.SAM, ClassEnum.RPR, ClassEnum.VPR, ClassEnum.PLD,
+        ClassEnum.WAR, ClassEnum.DRK, ClassEnum.GNB, ClassEnum.BRD, ClassEnum.MCH, ClassEnum.DNC, ClassEnum.SMN,
+        ClassEnum.RDM, ClassEnum.BLM, ClassEnum.PCT, ClassEnum.WHM, ClassEnum.SCH, ClassEnum.AST, ClassEnum.SGE
+    ];
 
     public void Save()
     {

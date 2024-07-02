@@ -43,7 +43,7 @@ public class ChatManager : IDisposable
     private unsafe void ExecuteCommand(string command)
     {
         var framework = FFXIVClientStructs.FFXIV.Client.System.Framework.Framework.Instance();
-        var uiModule = framework->GetUiModule();
+        var uiModule = framework->GetUIModule();
 
         using var payload = new ChatPayload(command);
         var payloadPtr = Marshal.AllocHGlobal(400);

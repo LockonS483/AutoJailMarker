@@ -40,10 +40,10 @@ internal class PriorityListWindow(AutoJailMarkerConfig config, AutoJailMarkerPlu
 
         var minSize = new Vector2(220, 200);
         var partySize = Service.PartyList.Length;
+        const ImGuiWindowFlags flags = ImGuiWindowFlags.NoResize | ImGuiWindowFlags.AlwaysAutoResize;
 
         ImGui.SetNextWindowSizeConstraints(minSize, new Vector2(float.MaxValue, float.MaxValue));
-        if (ImGui.Begin("Auto Jail Marker - Priority List", ref Visible,
-                ImGuiWindowFlags.NoResize | ImGuiWindowFlags.AlwaysAutoResize))
+        if (ImGui.Begin("Auto Jail Marker - Priority List", ref Visible, flags))
         {
             DrawPriorityTable(config.UseJobPrio);
             DrawImportButton(config.UseJobPrio, partySize);
@@ -71,13 +71,13 @@ internal class PriorityListWindow(AutoJailMarkerConfig config, AutoJailMarkerPlu
         {
             var indexColumnSize = useJobPrio ? 23 : 16;
             var inputColumnSize = useJobPrio ? 91 : 185;
-            var buttonColumnSize = useJobPrio ? 46 : 72;
+            var buttonColumnSize = useJobPrio ? 46 : 76;
 
             ImGui.TableSetupColumn(string.Empty, ImGuiTableColumnFlags.WidthFixed, indexColumnSize);
             ImGui.TableSetupColumn(string.Empty, ImGuiTableColumnFlags.WidthFixed, inputColumnSize);
             ImGui.TableSetupColumn(string.Empty, ImGuiTableColumnFlags.WidthFixed, buttonColumnSize);
 
-            var fieldCount = useJobPrio ? 19 : 8;
+            var fieldCount = useJobPrio ? Helper.JobCount : 8;
 
             var duplicates = config.Prio.GroupBy(n => n.ToLower()).Where(g => g.Key != "" && g.Count() > 1).Select(g => g.Key).ToList();
 
@@ -99,7 +99,7 @@ internal class PriorityListWindow(AutoJailMarkerConfig config, AutoJailMarkerPlu
                 if (useJobPrio)
                 {
                     ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.75f);
-                    var abbreviation = Helper.Classes.Count == 19
+                    var abbreviation = Helper.Classes.Count == Helper.JobCount
                         ? Helper.Classes[(int)config.PrioJobs[i]]
                         : config.PrioJobs[i].ToString();
                     ImGui.InputText("##prioInput", ref abbreviation, 3, ImGuiInputTextFlags.ReadOnly);
@@ -129,7 +129,7 @@ internal class PriorityListWindow(AutoJailMarkerConfig config, AutoJailMarkerPlu
 
                 if (i != fieldCount - 1 && ImGuiComponents.IconButton(FontAwesomeIcon.ArrowDown))
                     MovePrio(useJobPrio, i, i + 1);
-                else if (i == fieldCount - 1) ImGuiHelpers.ScaledDummy(22 * ImGuiHelpers.GlobalScale, 0);
+                else if (i == fieldCount - 1) ImGuiHelpers.ScaledDummy(24 * ImGuiHelpers.GlobalScale, 0);
 
                 if ((useJobPrio && i != 0) || !useJobPrio) ImGui.SameLine();
 
@@ -137,7 +137,7 @@ internal class PriorityListWindow(AutoJailMarkerConfig config, AutoJailMarkerPlu
 
                 if (!useJobPrio)
                 {
-                    if (i == 0) ImGuiHelpers.ScaledDummy(22 * ImGuiHelpers.GlobalScale, 0);
+                    if (i == 0) ImGuiHelpers.ScaledDummy(24 * ImGuiHelpers.GlobalScale, 0);
 
                     ImGui.SameLine();
                     if (ImGuiComponents.IconButton(FontAwesomeIcon.Crosshairs)) SetCharacterFromTarget(i);
@@ -179,7 +179,7 @@ internal class PriorityListWindow(AutoJailMarkerConfig config, AutoJailMarkerPlu
     private void SetCharacterFromTarget(int currentIndex)
     {
         var target = Service.TargetManager.Target;
-        if (target is PlayerCharacter targetCharacter)
+        if (target is IPlayerCharacter targetCharacter)
         {
             var fullName = targetCharacter.Name.TextValue;
 
