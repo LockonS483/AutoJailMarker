@@ -154,16 +154,25 @@ internal class ConfigWindow(AutoJailMarkerConfig config, AutoJailMarkerPlugin au
     {
         if (ImGui.Button("Try Marks"))
         {
-            var currentMark = 1;
             partySize = partySize > 3 ? 3 : partySize == 0 ? 1 : partySize;
 
-            for (var i = 1; i <= partySize; i++)
+            if (partySize == 1)
             {
-                if (partySize <= 1 || Service.PartyList[i - 1]?.ObjectId == 0) continue;
-                
-                Service.PluginLog.Debug($"/mk attack{i} <{currentMark}>");
-                Service.ChatManager.SendCommand($"/mk attack{i} <{currentMark}>");
-                currentMark++;
+                Service.PluginLog.Debug($"/mk attack1 <me>");
+                Service.ChatManager.SendCommand($"/mk attack1 <me>");
+            }
+            else
+            {
+                var currentMark = 1;
+
+                for (var i = 1; i <= partySize; i++)
+                {
+                    if (partySize <= 1 || Service.PartyList[i - 1]?.ObjectId == 0) continue;
+                    
+                    Service.PluginLog.Debug($"/mk attack{i} <{currentMark}>");
+                    Service.ChatManager.SendCommand($"/mk attack{i} <{currentMark}>");
+                    currentMark++;
+                }
             }
         }
 
