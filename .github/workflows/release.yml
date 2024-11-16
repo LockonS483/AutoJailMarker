@@ -16,7 +16,7 @@ jobs:
 
       - name: Get-Version
         id: version
-        run: echo "VERSION=$(([XML](Get-Content AutoJailMarker\AutoJailMarker.csproj)).Project.PropertyGroup.Version)".Trim() >> $env:GITHUB_OUTPUT
+        run: echo "VERSION=$(([XML](Get-Content AutoJailMarker/AutoJailMarker.csproj)).Project.PropertyGroup.Version)".Trim() >> $env:GITHUB_OUTPUT
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -37,38 +37,38 @@ jobs:
         run: |
           Invoke-Expression "dotnet build --no-restore --configuration Release --nologo -p:Version=${{ env.VERSION }} -p:FileVersion=${{ env.VERSION }} -p:AssemblyVersion=${{ env.VERSION }}"
 
+      - name: Prepare Release
+        id: prepare
+        run: |
+          $path = 'AutoJailMarker/bin/Release/AutoJailMarker'
+          $json = Get-Content -Raw $path/AutoJailMarker.json | ConvertFrom-Json
+          echo "API=$($json[0].DalamudApiLevel)".Trim() >> $env:GITHUB_OUTPUT
+          Move-Item -Path $path/latest.zip -Destination AutoJailMarker.zip
+
       - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
+        uses: softprops/action-gh-release@v2
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: "refs/tags/${{ steps.version.outputs.VERSION }}"
+          TITLE: ${{ steps.version.outputs.VERSION }}
         with:
           tag_name: ${{ env.TAG }}
-          release_name: ${{ env.TAG }}
+          name : ${{ env.TITLE }}
           draft: false
           prerelease: false
-
-      - name: Upload Release Asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./AutoJailMarker/bin/Release/AutoJailMarker/latest.zip
-          asset_name: AutoJailMarker.zip
-          asset_content_type: application/zip
+          files: AutoJailMarker.zip
 
       - name: Write out repo.json
         env:
           VERSION: ${{ steps.version.outputs.VERSION }}
+          API: ${{ steps.prepare.outputs.API }}
         run: |
           $version = "${{ env.VERSION }}"
+          $api = ${{ env.API }}
           $unix = Get-Date -UFormat %s
-          $path = './AutoJailMarker/repo.json'
+          $path = 'AutoJailMarker/repo.json'
           $json = Get-Content -Raw $path | ConvertFrom-Json
           $json[0].AssemblyVersion = $version
+          $json[0].DalamudApiLevel = $api
           $json[0].DownloadLinkInstall = $json.DownloadLinkInstall -replace '[^/]+/AutoJailMarker.zip',"$version/AutoJailMarker.zip"
           $json[0].DownloadLinkTesting = $json.DownloadLinkTesting -replace '[^/]+/AutoJailMarker.zip',"$version/AutoJailMarker.zip"
           $json[0].DownloadLinkUpdate = $json.DownloadLinkUpdate -replace '[^/]+/AutoJailMarker.zip',"$version/AutoJailMarker.zip"
