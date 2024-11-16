@@ -67,6 +67,13 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
         if (jobClassSheet != null)
             Helper.Classes = jobClassSheet.ToArray().Where(row => Enum.IsDefined(typeof(ClassEnum), row.JobIndex))
                 .ToDictionary<ClassJob, int, string>(row => row.JobIndex, row => row.Abbreviation.ToString());
+        
+#if DEBUG
+        if (pluginInterface.IsDevMenuOpen)
+        {
+            DrawMainUi();
+        }
+#endif
     }
 
     public void Dispose()
