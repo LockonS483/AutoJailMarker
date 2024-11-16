@@ -60,12 +60,12 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
         });
 
         Service.PluginInterface.UiBuilder.Draw += DrawUi;
+        Service.PluginInterface.UiBuilder.OpenMainUi += DrawMainUi;
         Service.PluginInterface.UiBuilder.OpenConfigUi += DrawConfigUi;
 
         var jobClassSheet = Service.DataManager.GameData.GetExcelSheet<ClassJob>();
         if (jobClassSheet != null)
             Helper.Classes = jobClassSheet.ToArray().Where(row => Enum.IsDefined(typeof(ClassEnum), row.JobIndex))
-                .ToDictionary<ClassJob, int, string>(row => row.JobIndex, row => row.Abbreviation);
                 .ToDictionary<ClassJob, int, string>(row => row.JobIndex, row => row.Abbreviation.ToString());
     }
 
@@ -103,10 +103,10 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
         {
             case "":
             case Helper.SettingsCommand:
-                DrawConfigUi();
+                DrawMainUi();
                 break;
             case Helper.PriorityCommand:
-                priorityListWindow.Visible = !priorityListWindow.Visible;
+                DrawConfigUi();
                 break;
         }
     }
@@ -117,9 +117,14 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
         priorityListWindow.Draw();
     }
 
-    private void DrawConfigUi()
+    private void DrawMainUi()
     {
         configWindow.Visible = !configWindow.Visible;
+    }
+    
+    private void DrawConfigUi()
+    {
+        priorityListWindow.Visible = !priorityListWindow.Visible;
     }
 
     private void ExecuteMarkers(bool echo = false)
