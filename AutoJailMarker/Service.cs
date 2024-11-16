@@ -18,8 +18,8 @@ internal class Service
     [PluginService] public static ITargetManager TargetManager { get; private set; } = null!;
     [PluginService] public static IObjectTable ObjectTable { get; private set; } = null!;
     [PluginService] public static IPluginLog PluginLog { get; private set; } = null!;
-    [PluginService] public static IGameInteropProvider Hooks { get; private set; } = null;
-    [PluginService] public static ITextureProvider Textures { get; private set; } = null;
+    [PluginService] public static IGameInteropProvider Hooks { get; private set; } = null!;
+    [PluginService] public static ITextureProvider Textures { get; private set; } = null!;
 
     public static ChatManager ChatManager { get; set; } = null!;
 }

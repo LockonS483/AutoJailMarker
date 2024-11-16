@@ -7,7 +7,7 @@ using Dalamud.Game.Command;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +18,7 @@ namespace AutoJailMarker;
 internal class AutoJailMarkerPlugin : IDalamudPlugin
 {
     private static string Name => "Auto Jail Marker";
-    public List<IPlayerCharacter> OrderedPartyList;
+    public List<IPlayerCharacter> OrderedPartyList = [];
     private List<int> markedIndexes = [];
 
     public AutoJailMarkerConfig PluginConfig { get; }
@@ -66,6 +66,7 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
         if (jobClassSheet != null)
             Helper.Classes = jobClassSheet.ToArray().Where(row => Enum.IsDefined(typeof(ClassEnum), row.JobIndex))
                 .ToDictionary<ClassJob, int, string>(row => row.JobIndex, row => row.Abbreviation);
+                .ToDictionary<ClassJob, int, string>(row => row.JobIndex, row => row.Abbreviation.ToString());
     }
 
     public void Dispose()
@@ -183,8 +184,8 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
             var player = Helper.GetPlayerByObjectId(objectId);
             if (player == null) continue;
 
-            var world = player.HomeWorld.GameData;
-            var worldName = world != null ? "@" + world.Name.RawString : "";
+            var world = player.HomeWorld.Value;
+            var worldName = "@" + world.Name.ToString();
 
             OrderedPartyList.Add(player);
             ChatManager.PrintEcho(player.Name.TextValue + worldName, echo);
@@ -200,12 +201,10 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
         {
             foreach (var classEnum in PluginConfig.PrioJobs)
             {
-                foreach (var partyIndex in OrderedPartyList.Where(p => p.ClassJob.GameData?.JobIndex == (uint)classEnum)
+                foreach (var partyIndex in OrderedPartyList.Where(p => p.ClassJob.Value.JobIndex == (uint)classEnum)
                              .Select(p =>
                                  new PartyIndex(
-                                     p.Name.TextValue + (p.HomeWorld.GameData != null
-                                         ? "@" + p.HomeWorld.GameData.Name.RawString
-                                         : ""),
+                                     p.Name.TextValue + p.HomeWorld.Value.Name.ToString(),
                                      p.GameObjectId,
                                      OrderedPartyList.IndexOf(p) + 1)
                              ))
@@ -235,12 +234,10 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
 
                 var partyIndexes = OrderedPartyList.Where(p =>
                     p.Name.TextValue.Contains(prioName, StringComparison.CurrentCultureIgnoreCase) &&
-                    (world == string.Empty || string.Equals(p.HomeWorld.GameData?.Name.RawString, world, StringComparison.CurrentCultureIgnoreCase))
+                    (world == string.Empty || string.Equals(p.HomeWorld.Value.Name.ToString(), world, StringComparison.CurrentCultureIgnoreCase))
                 ).Select(p =>
                     new PartyIndex(
-                        p.Name.TextValue + (p.HomeWorld.GameData != null
-                            ? "@" + p.HomeWorld.GameData.Name.RawString
-                            : ""),
+                        p.Name.TextValue + p.HomeWorld.Value.Name.ToString(),
                         p.GameObjectId,
                         OrderedPartyList.IndexOf(p) + 1
                     )
@@ -260,9 +257,7 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
                      where partyPrioList.All(pIndex => pIndex.Name != pChar.Name.TextValue)
                      select
                          new PartyIndex(
-                             pChar.Name.TextValue + (pChar.HomeWorld.GameData != null
-                                 ? "@" + pChar.HomeWorld.GameData.Name.RawString
-                                 : ""),
+                             pChar.Name.TextValue + pChar.HomeWorld.Value.Name.ToString(),
                              pChar.GameObjectId,
                              OrderedPartyList.IndexOf(pChar) + 1
                          )

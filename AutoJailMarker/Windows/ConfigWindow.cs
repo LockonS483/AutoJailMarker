@@ -5,7 +5,7 @@ using Dalamud.Interface.Utility;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
 using ImGuiNET;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 using System;
 using System.Linq;
 using System.Numerics;
@@ -16,7 +16,7 @@ namespace AutoJailMarker.Windows;
 
 internal class ConfigWindow(AutoJailMarkerConfig config, AutoJailMarkerPlugin autoJailMarkerPlugin) : IDisposable
 {
-    private IDalamudTextureWrap titanImage;
+    private IDalamudTextureWrap? titanImage;
     
     public bool Visible;
     private bool headerOpened;
@@ -233,9 +233,9 @@ internal class ConfigWindow(AutoJailMarkerConfig config, AutoJailMarkerPlugin au
         ImGui.Indent(25 * ImGuiHelpers.GlobalScale);
 
         var territoryType = Service.ClientState.TerritoryType;
-        var placeName = Service.DataManager.GetExcelSheet<TerritoryType>()?.GetRow(territoryType)?
-            .PlaceName.Value?.Name;
-        var cPlace = placeName == null ? $"{territoryType}" : $"{placeName} ({territoryType})";
+        var placeName = Service.DataManager.GetExcelSheet<TerritoryType>().GetRow(territoryType)
+            .PlaceName.Value.Name;
+        var cPlace = $"{placeName} ({territoryType})";
 
         ImGui.Text($"Current place: {cPlace}");
 
