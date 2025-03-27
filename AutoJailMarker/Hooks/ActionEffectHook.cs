@@ -1,23 +1,20 @@
 ﻿using AutoJailMarker.Classes;
 using Dalamud.Hooking;
-using Dalamud.Utility.Signatures;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Numerics;
+using FFXIVClientStructs.FFXIV.Client.Game.Character;
+using FFXIVClientStructs.FFXIV.Client.Game.Object;
+using static FFXIVClientStructs.FFXIV.Client.Game.Character.ActionEffectHandler;
 
 namespace AutoJailMarker.Hooks;
 
 internal unsafe class ActionEffectHook : IDisposable
 {
-    [Signature("40 55 56 57 41 54 41 55 41 56 48 8D AC 24 ?? ?? ?? ??")]
-    private readonly IntPtr receiveAEtPtr = new();
-    
-    private readonly AutoJailMarkerPlugin autoJailMarkerPlugin;
-    private readonly Hook<ReceiveActionEffectDelegate> receiveActionEffectHook;
-
-    private delegate void ReceiveActionEffectDelegate(int sourceId, IntPtr sourceCharacter, IntPtr pos,
-        IntPtr effectHeader, IntPtr effectArray, IntPtr effectTrail);
+    private readonly AutoJailMarkerPlugin _autoJailMarkerPlugin;
+    private readonly Hook<Delegates.Receive>? _receiveActionEffectHook;
 
     private static readonly uint[] SkillIds = [645, 1652, 11115, 11116];
 
@@ -26,32 +23,31 @@ internal unsafe class ActionEffectHook : IDisposable
 
     public ActionEffectHook(AutoJailMarkerPlugin autoJailMarkerPlugin)
     {
-        this.autoJailMarkerPlugin = autoJailMarkerPlugin;
+        _autoJailMarkerPlugin = autoJailMarkerPlugin;
 
         Service.Hooks.InitializeFromAttributes(this);
 
-        receiveActionEffectHook = Service.Hooks.HookFromAddress<ReceiveActionEffectDelegate>(receiveAEtPtr, ReceiveActionEffect);
-        receiveActionEffectHook.Enable();
+        _receiveActionEffectHook = Service.Hooks.HookFromAddress<Delegates.Receive>(MemberFunctionPointers.Receive, ReceiveActionEffect);
+        _receiveActionEffectHook.Enable();
     }
 
     public void Dispose()
     {
-        receiveActionEffectHook.Dispose();
+        _receiveActionEffectHook?.Dispose();
         GC.SuppressFinalize(this);
     }
 
-    private void ReceiveActionEffect(int sourceId, IntPtr sourceCharacter, IntPtr pos, IntPtr effectHeader,
-        IntPtr effectArray, IntPtr effectTrail)
+    private void ReceiveActionEffect(uint actorId, Character* casterPtr, Vector3* targetPos, Header* header,
+        TargetEffects* effects, GameObjectId* targetEntityIds)
     {
-        if (!Helper.PlayerExists || !autoJailMarkerPlugin.PluginConfig.Enabled)
+        if (!Helper.PlayerExists || !_autoJailMarkerPlugin.PluginConfig.Enabled)
         {
-            receiveActionEffectHook.Original(sourceId, sourceCharacter, pos, effectHeader, effectArray,
-                effectTrail);
+            _receiveActionEffectHook?.Original(actorId, casterPtr, targetPos, header, effects, targetEntityIds);
             return;
         }
 
-        var id = *((uint*)effectHeader.ToPointer() + 0x2);
-        var targetCount = *(byte*)(effectHeader + 0x21);
+        var id = header->ActionId;
+        var targetCount = header->NumTargets;
         var targetsParty = false;
 
         var targetEntries = 1;
@@ -78,7 +74,7 @@ internal unsafe class ActionEffectHook : IDisposable
         var targets = new ulong[targetEntries];
         for (var i = 0; i < targetCount; i++)
         {
-            targets[i] = *(ulong*)(effectTrail + i * 8);
+            targets[i] = *(ulong*)(targetEntityIds + i * 8);
             if (Helper.IsIdInParty(targets[i])) targetsParty = true;
         }
 
@@ -95,6 +91,6 @@ internal unsafe class ActionEffectHook : IDisposable
                     if (CollectionTargets.Count == Helper.JailCount) break;
                 }
 
-        receiveActionEffectHook.Original(sourceId, sourceCharacter, pos, effectHeader, effectArray, effectTrail);
+        _receiveActionEffectHook?.Original(actorId, casterPtr, targetPos, header, effects, targetEntityIds);
     }
 }

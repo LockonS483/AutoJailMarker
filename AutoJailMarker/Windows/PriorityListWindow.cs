@@ -16,7 +16,7 @@ namespace AutoJailMarker.Windows;
 internal class PriorityListWindow(AutoJailMarkerConfig config, AutoJailMarkerPlugin autoJailMarkerPlugin) : IDisposable
 {
     public bool Visible;
-    private string inlineError = string.Empty;
+    private string _inlineError = string.Empty;
 
     public void Dispose()
     {
@@ -59,10 +59,10 @@ internal class PriorityListWindow(AutoJailMarkerConfig config, AutoJailMarkerPlu
     private void DrawPriorityTable(bool useJobPrio)
     {
         ImGui.Text($"Priority {(useJobPrio ? "Job" : "Character")} List");
-        if (!string.IsNullOrEmpty(inlineError))
+        if (!string.IsNullOrEmpty(_inlineError))
         {
             ImGui.SameLine();
-            ImGui.TextColored(ImGuiColors.DPSRed, $"({inlineError})");
+            ImGui.TextColored(ImGuiColors.DPSRed, $"({_inlineError})");
         }
 
         ImGui.Indent(25 * ImGuiHelpers.GlobalScale);
@@ -206,8 +206,8 @@ internal class PriorityListWindow(AutoJailMarkerConfig config, AutoJailMarkerPlu
     /// <param name="errorMessage">Error message</param>
     private void SetInlineError(string errorMessage)
     {
-        inlineError = errorMessage;
-        Task.Delay(5000).ContinueWith(_ => inlineError = string.Empty);
+        _inlineError = errorMessage;
+        Task.Delay(5000).ContinueWith(_ => _inlineError = string.Empty);
     }
 
     /// <summary>

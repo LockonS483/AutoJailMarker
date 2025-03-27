@@ -16,28 +16,24 @@ namespace AutoJailMarker.Windows;
 
 internal class ConfigWindow(AutoJailMarkerConfig config, AutoJailMarkerPlugin autoJailMarkerPlugin) : IDisposable
 {
-    private IDalamudTextureWrap? titanImage;
+    private IDalamudTextureWrap? _titanImage;
     
     public bool Visible;
-    private bool headerOpened;
+    private bool _headerOpened;
 
     public void Dispose()
     {
-        titanImage?.Dispose();
         GC.SuppressFinalize(this);
     }
 
     /// <summary>
     /// Main draw handler
     /// </summary>
-    public async void Draw()
+    public void Draw()
     {
-        if (titanImage == null)
-        {
-            var assembly = Assembly.GetExecutingAssembly();
-            const string resourceName = "AutoJailMarker.Data.Titan.png";
-            titanImage = await Service.Textures.GetFromManifestResource(assembly, resourceName).RentAsync();
-        }
+        var assembly = Assembly.GetExecutingAssembly();
+        const string resourceName = "AutoJailMarker.Data.Titan.png";
+        _titanImage = Service.Textures.GetFromManifestResource(assembly, resourceName).GetWrapOrDefault();
         
         DrawSettingsWindow();
     }
@@ -64,10 +60,10 @@ internal class ConfigWindow(AutoJailMarkerConfig config, AutoJailMarkerPlugin au
             DrawPartyTable(partySize);
 
             // Titan image
-            if (titanImage != null)
+            if (_titanImage != null)
             {
                 ImGui.Indent(10 * ImGuiHelpers.GlobalScale);
-                ImGui.Image(titanImage.ImGuiHandle, new Vector2(titanImage.Width, titanImage.Height));
+                ImGui.Image(_titanImage.ImGuiHandle, new Vector2(_titanImage.Width, _titanImage.Height));
                 ImGui.Unindent(10 * ImGuiHelpers.GlobalScale);
             }
         }
@@ -159,7 +155,7 @@ internal class ConfigWindow(AutoJailMarkerConfig config, AutoJailMarkerPlugin au
             if (partySize == 1)
             {
                 Service.PluginLog.Debug($"/mk attack1 <me>");
-                Service.ChatManager.SendCommand($"/mk attack1 <me>");
+                ChatManager.ExecuteCommand($"/mk attack1 <me>");
             }
             else
             {
@@ -170,7 +166,7 @@ internal class ConfigWindow(AutoJailMarkerConfig config, AutoJailMarkerPlugin au
                     if (partySize <= 1 || Service.PartyList[i - 1]?.ObjectId == 0) continue;
                     
                     Service.PluginLog.Debug($"/mk attack{i} <{currentMark}>");
-                    Service.ChatManager.SendCommand($"/mk attack{i} <{currentMark}>");
+                    ChatManager.ExecuteCommand($"/mk attack{i} <{currentMark}>");
                     currentMark++;
                 }
             }
@@ -280,10 +276,10 @@ internal class ConfigWindow(AutoJailMarkerConfig config, AutoJailMarkerPlugin au
     {
         if (!Helper.PlayerExists || partySize <= 1) return;
 
-        ImGui.SetNextItemOpen(headerOpened);
+        ImGui.SetNextItemOpen(_headerOpened);
         if (ImGui.CollapsingHeader("Current Party list from Game data"))
         {
-            headerOpened = true;
+            _headerOpened = true;
 
             ImGui.Indent(25 * ImGuiHelpers.GlobalScale);
 
@@ -310,7 +306,7 @@ internal class ConfigWindow(AutoJailMarkerConfig config, AutoJailMarkerPlugin au
         }
         else
         {
-            headerOpened = false;
+            _headerOpened = false;
         }
 
         ImGui.Spacing();

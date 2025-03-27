@@ -19,12 +19,12 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
 {
     private static string Name => "Auto Jail Marker";
     public List<IPlayerCharacter> OrderedPartyList = [];
-    private List<int> markedIndexes = [];
+    private List<int> _markedIndexes = [];
 
     public AutoJailMarkerConfig PluginConfig { get; }
-    private readonly ConfigWindow configWindow;
-    private readonly PriorityListWindow priorityListWindow;
-    private readonly ActionEffectHook actionEffectHook;
+    private readonly ConfigWindow _configWindow;
+    private readonly PriorityListWindow _priorityListWindow;
+    private readonly ActionEffectHook _actionEffectHook;
 
     public AutoJailMarkerPlugin(IDalamudPluginInterface pluginInterface)
     {
@@ -40,13 +40,11 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
             PluginConfig.PrioJobs = list.ToArray();
         }
 
-        Service.ChatManager = new ChatManager();
-
         ChatManager.PrintEcho("-Initializing Plugin-", PluginConfig.Debug);
 
-        configWindow = new ConfigWindow(PluginConfig, this);
-        priorityListWindow = new PriorityListWindow(PluginConfig, this);
-        actionEffectHook = new ActionEffectHook(this);
+        _configWindow = new ConfigWindow(PluginConfig, this);
+        _priorityListWindow = new PriorityListWindow(PluginConfig, this);
+        _actionEffectHook = new ActionEffectHook(this);
         Service.Framework.Update += FrameworkUpdate;
 
         Service.CommandManager.AddHandler(Helper.SettingsCommand, new CommandInfo(OnCommand)
@@ -78,9 +76,9 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
 
     public void Dispose()
     {
-        configWindow.Dispose();
-        priorityListWindow.Dispose();
-        actionEffectHook.Dispose();
+        _configWindow.Dispose();
+        _priorityListWindow.Dispose();
+        _actionEffectHook.Dispose();
         Service.Framework.Update -= FrameworkUpdate;
         Service.CommandManager.RemoveHandler(Helper.SettingsCommand);
         Service.CommandManager.RemoveHandler(Helper.PriorityCommand);
@@ -90,18 +88,18 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
 
     private void FrameworkUpdate(IFramework framework)
     {
-        if (!Helper.IsMarking && actionEffectHook.CollectionTargets.Count >= Helper.JailCount)
+        if (!Helper.IsMarking && _actionEffectHook.CollectionTargets.Count >= Helper.JailCount)
         {
             Helper.IsMarking = true;
             ExecuteMarkers(PluginConfig.Debug);
         }
 
-        if (actionEffectHook.ClearMarkers.ElapsedMilliseconds < Helper.CollectionTimeout) return;
+        if (_actionEffectHook.ClearMarkers.ElapsedMilliseconds < Helper.CollectionTimeout) return;
 
-        actionEffectHook.CollectionTargets = [];
+        _actionEffectHook.CollectionTargets = [];
         if (Helper.IsMarking) ClearMarkers(PluginConfig.Debug);
-        actionEffectHook.ClearMarkers.Stop();
-        actionEffectHook.ClearMarkers.Reset();
+        _actionEffectHook.ClearMarkers.Stop();
+        _actionEffectHook.ClearMarkers.Reset();
     }
 
     public void OnCommand(string command, string args)
@@ -120,18 +118,18 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
 
     private void DrawUi()
     {
-        configWindow.Draw();
-        priorityListWindow.Draw();
+        _configWindow.Draw();
+        _priorityListWindow.Draw();
     }
 
     private void DrawMainUi()
     {
-        configWindow.Visible = !configWindow.Visible;
+        _configWindow.Visible = !_configWindow.Visible;
     }
     
     private void DrawConfigUi()
     {
-        priorityListWindow.Visible = !priorityListWindow.Visible;
+        _priorityListWindow.Visible = !_priorityListWindow.Visible;
     }
 
     private void ExecuteMarkers(bool echo = false)
@@ -158,7 +156,7 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
             }
 
             ChatManager.PrintEcho($">start match for {partyPrioList[i].Name}", echo);
-            if (actionEffectHook.CollectionTargets.Contains(partyPrioList[i].ObjectId))
+            if (_actionEffectHook.CollectionTargets.Contains(partyPrioList[i].ObjectId))
             {
                 ChatManager.PrintEcho(
                     Helper.MarkPrefix[playersMarked] + string.Format(Helper.MarkMessage, partyPrioList[i].Name, i + 1),
@@ -166,8 +164,8 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
 
                 var commandBuilder = $"/mk attack{playersMarked + 1} <{partyPrioList[i].Index}>";
 
-                markedIndexes.Add(partyPrioList[i].Index);
-                Service.ChatManager.SendCommand(commandBuilder);
+                _markedIndexes.Add(partyPrioList[i].Index);
+                ChatManager.ExecuteCommand(commandBuilder);
                 playersMarked++;
 
                 ChatManager.PrintEcho($"--> FOUND", echo);
@@ -288,9 +286,9 @@ internal class AutoJailMarkerPlugin : IDalamudPlugin
     private void ClearMarkers(bool echo = false)
     {
         ChatManager.PrintEcho("---Clearing Marks---", echo);
-        foreach (var i in markedIndexes) Service.ChatManager.SendCommand($"/mk clear <{i}>");
+        foreach (var i in _markedIndexes) ChatManager.ExecuteCommand($"/mk clear <{i}>");
 
-        markedIndexes = [];
+        _markedIndexes = [];
         Helper.IsMarking = false;
     }
 }

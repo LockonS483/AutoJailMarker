@@ -1,55 +1,22 @@
-﻿using AutoJailMarker.Classes;
-using Dalamud.Plugin.Services;
-using Dalamud.Utility.Signatures;
-using FFXIVClientStructs.FFXIV.Client.UI;
+﻿using static FFXIVClientStructs.FFXIV.Client.UI.UIModule;
 using System;
-using System.Runtime.InteropServices;
-using System.Threading.Channels;
+using FFXIVClientStructs.FFXIV.Client.System.String;
 
 namespace AutoJailMarker.Managers;
 
-public class ChatManager : IDisposable
+public abstract class ChatManager : IDisposable
 {
-    private readonly Channel<string> chatBoxMessages = Channel.CreateUnbounded<string>();
-
-    [Signature("48 89 5C 24 ?? 48 89 74 24 ?? 57 48 83 EC 20 48 8B F2 48 8B F9 45 84 C9")]
-    private readonly ProcessChatBoxDelegate processChatBox = null!;
-
-    private unsafe delegate void ProcessChatBoxDelegate(UIModule* uiModule, IntPtr message, IntPtr unused, byte a4);
-
-    public ChatManager()
-    {
-        Service.Hooks.InitializeFromAttributes(this);
-        Service.Framework.Update += FrameworkUpdate;
-    }
-
     public void Dispose()
     {
-        Service.Framework.Update -= FrameworkUpdate;
-        chatBoxMessages.Writer.Complete();
         GC.SuppressFinalize(this);
     }
 
-    private void FrameworkUpdate(IFramework framework)
+    public static unsafe void ExecuteCommand(string command)
     {
-        if (chatBoxMessages.Reader.TryRead(out var message)) ExecuteCommand(message);
-    }
-
-    public async void SendCommand(string command)
-    {
-        await chatBoxMessages.Writer.WriteAsync(command);
-    }
-
-    private unsafe void ExecuteCommand(string command)
-    {
-        var framework = FFXIVClientStructs.FFXIV.Client.System.Framework.Framework.Instance();
-        var uiModule = framework->GetUIModule();
-
-        using var payload = new ChatPayload(command);
-        var payloadPtr = Marshal.AllocHGlobal(400);
-        Marshal.StructureToPtr(payload, payloadPtr, false);
-
-        processChatBox(uiModule, payloadPtr, IntPtr.Zero, 0);
+        var utfMessage = Utf8String.FromString(command);
+        utfMessage->SanitizeString((AllowedEntities)0x27F);
+        
+        Instance()->ProcessChatBoxEntry(utfMessage, nint.Zero);
     }
 
     public static void PrintEcho(string message, bool echo = true)
