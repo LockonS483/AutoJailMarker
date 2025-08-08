@@ -4,7 +4,7 @@ using AutoJailMarker.Managers;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using Lumina.Excel.Sheets;
 using System;
 using System.Linq;
@@ -63,7 +63,7 @@ internal class ConfigWindow(AutoJailMarkerConfig config, AutoJailMarkerPlugin au
             if (_titanImage != null)
             {
                 ImGui.Indent(10 * ImGuiHelpers.GlobalScale);
-                ImGui.Image(_titanImage.ImGuiHandle, new Vector2(_titanImage.Width, _titanImage.Height));
+                ImGui.Image(_titanImage.Handle, new Vector2(_titanImage.Width, _titanImage.Height));
                 ImGui.Unindent(10 * ImGuiHelpers.GlobalScale);
             }
         }

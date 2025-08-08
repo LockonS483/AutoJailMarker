@@ -5,7 +5,7 @@ using Dalamud.Interface;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using System;
 using System.Linq;
 using System.Numerics;
@@ -89,7 +89,7 @@ internal class PriorityListWindow(AutoJailMarkerConfig config, AutoJailMarkerPlu
 
                 var index = i + 1;
                 ImGui.SetNextItemWidth(-1);
-                if (ImGui.InputInt("##indexInput", ref index, 0, 0, ImGuiInputTextFlags.EnterReturnsTrue))
+                if (ImGui.InputInt("##indexInput", ref index, flags: ImGuiInputTextFlags.EnterReturnsTrue))
                     if (index > 0 && index <= fieldCount)
                         MovePrio(useJobPrio, i, index - 1);
 
