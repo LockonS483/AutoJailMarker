@@ -24,6 +24,6 @@ public enum ClassEnum : byte
     DNC = 18,
     RPR = 19,
     SGE = 20,
-    PCT = 21,
-    VPR = 22
+    VPR = 21,
+    PCT = 22
 }
