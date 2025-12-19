@@ -6,7 +6,7 @@
 # UWU Jail Automarker
 Scuffed jail automarker that doesn't require macros or use modifier keys.
 
-This is intended for use with [XIVLauncher](https://github.com/goatcorp/FFXIVQuickLauncher)/[Dalamud API 11](https://github.com/goatcorp/Dalamud).
+This is intended for use with [XIVLauncher](https://github.com/goatcorp/FFXIVQuickLauncher)/[Dalamud](https://github.com/goatcorp/Dalamud).
 
 ## Installation
 ```

@@ -19,7 +19,7 @@ public static unsafe class Helper
     public const string MarkMessage = " mark: {0} - Party list position: {1}";
     public const string NotInPrioMessage = "Not in priority list - using party list as priority";
 
-    public static bool PlayerExists => Service.ClientState.LocalPlayer != null;
+    public static bool PlayerExists => Service.ObjectTable.LocalPlayer != null;
 
     public static bool IsIdInParty(ulong id)
     {

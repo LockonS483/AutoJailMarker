@@ -163,7 +163,7 @@ internal class ConfigWindow(AutoJailMarkerConfig config, AutoJailMarkerPlugin au
 
                 for (var i = 1; i <= partySize; i++)
                 {
-                    if (partySize <= 1 || Service.PartyList[i - 1]?.ObjectId == 0) continue;
+                    if (partySize <= 1 || Service.PartyList[i - 1]?.EntityId == 0) continue;
                     
                     Service.PluginLog.Debug($"/mk attack{i} <{currentMark}>");
                     ChatManager.ExecuteCommand($"/mk attack{i} <{currentMark}>");
@@ -286,7 +286,7 @@ internal class ConfigWindow(AutoJailMarkerConfig config, AutoJailMarkerPlugin au
             if (ImGui.BeginTable("PartyTable", 2, ImGuiTableFlags.PreciseWidths))
             {
                 ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthFixed, 120);
-                ImGui.TableSetupColumn("ObjectID", ImGuiTableColumnFlags.WidthStretch, 46);
+                ImGui.TableSetupColumn("EntityID", ImGuiTableColumnFlags.WidthStretch, 46);
 
                 ImGui.TableHeadersRow();
 
@@ -296,7 +296,7 @@ internal class ConfigWindow(AutoJailMarkerConfig config, AutoJailMarkerPlugin au
                     ImGui.Text(p.Name.TextValue);
 
                     ImGui.TableNextColumn();
-                    ImGui.Text(p.ObjectId.ToString());
+                    ImGui.Text(p.EntityId.ToString());
                 }
 
                 ImGui.EndTable();
