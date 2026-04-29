@@ -1,7 +1,7 @@
-﻿<Project Sdk="Dalamud.NET.Sdk/14.0.1">
+﻿<Project Sdk="Dalamud.NET.Sdk/15.0.0">
     <PropertyGroup Label="Target">
         <AssemblyName>AutoJailMarker</AssemblyName>
-        <Version>3.4.3.0</Version>
+        <Version>3.4.3.1</Version>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)' == 'Release'">
